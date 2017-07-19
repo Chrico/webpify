@@ -1,10 +1,10 @@
 <?php declare( strict_types=1 );
 
-namespace WebPify\Builder;
+namespace WebPify\Attachment;
 
 use WebPify\Transformer\ImageTransformerInterface;
 
-class WebPImageBuilder {
+class WebPImageGenerator {
 
 	public function __construct( ImageTransformerInterface $image_builder, array $upload_dir ) {
 
@@ -12,12 +12,21 @@ class WebPImageBuilder {
 		$this->upload_dir    = $upload_dir;
 	}
 
-	public function build( array $metadata ): array {
+	public function generate( array $metadata, $attachment_id ): bool {
 
-		$webp_metadata            = $this->generate_full( $metadata );
+		$webp_metadata = $this->generate_full( $metadata );
+		if ( empty( $webp_metadata ) ) {
+
+			return FALSE;
+		}
+
 		$webp_metadata[ 'sizes' ] = $this->generate_sizes( $metadata[ 'sizes' ] );
 
-		return $webp_metadata;
+		return (bool) update_post_meta(
+			$attachment_id,
+			WebPImage::ID,
+			$webp_metadata
+		);
 	}
 
 	/**

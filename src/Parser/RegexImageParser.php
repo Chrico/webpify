@@ -2,7 +2,8 @@
 
 namespace WebPify\Parser;
 
-use WebPify\Model\WebPImage;
+
+use WebPify\Attachment\WebPImage;
 
 class RegexImageParser implements ParserInterface {
 
@@ -42,7 +43,7 @@ class RegexImageParser implements ParserInterface {
 	public function build_image( string $img ): string {
 
 		$attributes = $this->get_attributes( $img );
-		$webp       = new \WebPify\Model\WebPImage( $attributes[ 'id' ] );
+		$webp       = new WebPImage( $attributes[ 'id' ] );
 
 		$webp_src = $webp->src( $attributes[ 'size' ] );
 		if ( $webp_src !== '' ) {

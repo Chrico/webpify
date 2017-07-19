@@ -1,20 +1,19 @@
 <?php declare( strict_types=1 );
 
-namespace WebPify\Builder;
+namespace WebPify\Attachment;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use WebPify\Core\BootableProviderInterface;
-use WebPify\Model\WebPImage;
 use WebPify\Transformer\NativeExtensionTransformer;
 
 final class Provider implements ServiceProviderInterface, BootableProviderInterface {
 
 	public function register( Container $plugin ) {
 
-		$plugin[ WebPImageBuilder::class ] = function ( Container $plugin ): WebPImageBuilder {
+		$plugin[ WebPImageGenerator::class ] = function ( Container $plugin ): WebPImageGenerator {
 
-			return new WebPImageBuilder(
+			return new WebPImageGenerator(
 				$plugin[ NativeExtensionTransformer::class ],
 				wp_get_upload_dir()
 			);
@@ -26,18 +25,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 		add_filter(
 			'wp_generate_attachment_metadata',
-			function ( array $metadata, $attachment_id ) use( $plugin ): array {
-
-				$builder = $plugin[ WebPImageBuilder::class ];
-
-				update_post_meta(
-					$attachment_id,
-					WebPImage::ID,
-					$builder->build( $metadata )
-				);
-
-				return $metadata;
-			},
+			[ $plugin[ WebPImageGenerator::class ], 'generate' ],
 			10,
 			2
 		);

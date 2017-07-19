@@ -16,14 +16,34 @@ class NativeExtensionTransformer implements ImageTransformerInterface {
 
 		$ext = pathinfo( $file, PATHINFO_EXTENSION );
 		if ( ! isset( $this->resouce_map[ $ext ] ) ) {
+
+			do_action(
+				'WebPify.error',
+				sprintf( 'Could not find "%s" in available extension.', $ext ),
+				[ 'extensions' => $this->resouce_map ]
+			);
+
 			return [];
 		}
 
 		$resource = $this->resouce_map[ $ext ]( $file );
 		$file     = $file . '.webp';
 		$success  = imagewebp( $resource, $file );
+		imagedestroy( $resource );
 
 		if ( ! $success ) {
+
+			$context = [
+				'file'       => $file,
+				'extensions' => $this->resouce_map
+			];
+
+			do_action(
+				'WebPify.error',
+				'Image creation failed.',
+				$context
+			);
+
 			return [];
 		}
 

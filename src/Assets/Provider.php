@@ -30,7 +30,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 					$src = str_replace(
 						home_url( '/wp-content' ),
 						WP_CONTENT_DIR,
-						wp_scripts()->registered[ $handle ]
+						wp_scripts()->registered[ $handle ]->src
 					);
 
 					$tag = printf(

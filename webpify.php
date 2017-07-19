@@ -13,7 +13,7 @@
 
 namespace WebPify;
 
-use WebPify\Model\WebPImage;
+use WebPify\Attachment\WebPImage;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	return;
@@ -36,7 +36,7 @@ function initialize() {
 
 		$plugin = new WebPify( [ 'config.plugin_file' => __FILE__ ] );
 		$plugin->register( new Assets\Provider() );
-		$plugin->register( new Builder\Provider() );
+		$plugin->register( new Attachment\Provider() );
 		$plugin->register( new Parser\Provider() );
 		$plugin->register( new Transformer\Provider() );
 
