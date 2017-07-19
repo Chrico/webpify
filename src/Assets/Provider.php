@@ -33,7 +33,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 						wp_scripts()->registered[ $handle ]->src
 					);
 
-					$tag = printf(
+					$tag = sprintf(
 						'<script async>%s</script>',
 						file_get_contents( $src )
 					);
