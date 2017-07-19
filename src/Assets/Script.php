@@ -21,25 +21,26 @@ class Script {
 
 	public function enqueue() {
 
-		list( $path, $url ) = $this->path_and_url();
-		wp_enqueue_script( self::HANDLE, $url, [], NULL, TRUE );
+		wp_enqueue_script(
+			self::HANDLE,
+			$this->url(),
+			[],
+			NULL,
+			TRUE
+		);
 	}
 
 	/**
-	 * @return array
+	 * @return string
 	 */
-	private function path_and_url(): array {
+	private function url(): string {
 
-		$file_name   = self::HANDLE;
-		$subdir      = '/assets/js/dist';
-		$folder_path = dirname( $this->plugin_file_path ) . $subdir;
-
-		$use_min   = ! $this->is_debug() && file_exists( "{$folder_path}/{$file_name}.min.js" );
-		$file_name .= $use_min ? '.min.js' : '.js';
+		$file_name = self::HANDLE . ( $this->is_debug() ? '.min.js' : '.js' );
+		$subdir    = '/assets/js/dist';
 
 		$url = plugins_url( "{$subdir}/{$file_name}", $this->plugin_file_path );
 
-		return [ "{$folder_path}/{$file_name}", $url ];
+		return $url;
 
 	}
 

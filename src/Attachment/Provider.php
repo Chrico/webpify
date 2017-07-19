@@ -11,9 +11,9 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 	public function register( Container $plugin ) {
 
-		$plugin[ WebPImageGenerator::class ] = function ( Container $plugin ): WebPImageGenerator {
+		$plugin[ MetaDataImageGenerator::class ] = function ( Container $plugin ): MetaDataImageGenerator {
 
-			return new WebPImageGenerator(
+			return new MetaDataImageGenerator(
 				$plugin[ NativeExtensionTransformer::class ],
 				wp_get_upload_dir()
 			);
@@ -25,7 +25,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 		add_filter(
 			'wp_generate_attachment_metadata',
-			[ $plugin[ WebPImageGenerator::class ], 'generate' ],
+			[ $plugin[ MetaDataImageGenerator::class ], 'generate' ],
 			10,
 			2
 		);

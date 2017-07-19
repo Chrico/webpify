@@ -4,11 +4,21 @@ namespace WebPify\Attachment;
 
 use WebPify\Transformer\ImageTransformerInterface;
 
-class WebPImageGenerator {
+class MetaDataImageGenerator {
 
-	public function __construct( ImageTransformerInterface $image_builder, array $upload_dir ) {
+	/**
+	 * @var ImageTransformerInterface
+	 */
+	private $transformer;
 
-		$this->image_builder = $image_builder;
+	/**
+	 * @var array
+	 */
+	private $upload_dir;
+
+	public function __construct( ImageTransformerInterface $transformer, array $upload_dir ) {
+
+		$this->transformer = $transformer;
 		$this->upload_dir    = $upload_dir;
 	}
 
@@ -41,7 +51,7 @@ class WebPImageGenerator {
 		// we've to use the "basedir" for the "full"-image.
 		$dir = trailingslashit( $this->upload_dir[ 'basedir' ] );
 
-		return $this->image_builder->create( $metadata, $dir );
+		return $this->transformer->create( $metadata, $dir );
 	}
 
 	/**
@@ -57,7 +67,7 @@ class WebPImageGenerator {
 		$build_sizes = [];
 
 		foreach ( $sizes as $size => $data ) {
-			$webp_data = $this->image_builder->create( $data, $dir );
+			$webp_data = $this->transformer->create( $data, $dir );
 			if ( isset( $webp_data[ 'file' ] ) ) {
 				$build_sizes[ $size ] = $webp_data;
 			}

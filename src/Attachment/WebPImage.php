@@ -10,7 +10,7 @@ class WebPImage {
 	const DATA_SRCSET = 'data-webp-srcset';
 
 	/**
-	 * default base64-image as placeholder for not loaded images.
+	 * Default base64-image as placeholder for not loaded images.
 	 */
 	const BASE64_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
