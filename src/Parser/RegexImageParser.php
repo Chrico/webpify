@@ -46,13 +46,15 @@ class RegexImageParser implements ParserInterface {
 
 		$webp_src = $webp->src( $attributes[ 'size' ] );
 		if ( $webp_src !== '' ) {
-			$key                        = WebPImage::DATA_SRC . '="' . $webp_src . '" />';
+			$key = WebPImage::DATA_SRC . '="' . $webp_src . '" />';
+
 			$this->replacements[ $key ] = '/>';
 		}
 
 		$webp_srcset = $webp->srcset( $attributes[ 'size' ] );
 		if ( $webp_srcset !== '' ) {
-			$key                        = WebPImage::DATA_SRCSET . '="' . $webp_srcset . '" />';
+			$key = WebPImage::DATA_SRCSET . '="' . $webp_srcset . '" />';
+
 			$this->replacements[ $key ] = '/>';
 		};
 

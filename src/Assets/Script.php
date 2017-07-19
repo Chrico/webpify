@@ -22,25 +22,7 @@ class Script {
 	public function enqueue() {
 
 		list( $path, $url ) = $this->path_and_url();
-
-		add_filter(
-			'script_loader_tag',
-			function ( $tag, $handle, $src ) {
-
-				if ( $handle === self::HANDLE ) {
-					$script = wp_scripts()->registered[ $handle ];
-					$src    = str_replace( home_url( '/wp-content' ), WP_CONTENT_DIR, $script->src );
-					$tag    = '<script async>' . file_get_contents( $src ) . '</script>';
-				}
-
-				return $tag;
-			},
-			10,
-			3
-		);
-
 		wp_enqueue_script( self::HANDLE, $url, [], NULL, TRUE );
-
 	}
 
 	/**

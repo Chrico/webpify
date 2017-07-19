@@ -10,19 +10,33 @@ class NativeExtensionTransformer implements ImageTransformerInterface {
 		'png'  => 'imagecreatefrompng'
 	];
 
-	public function create( string $file ): string {
+	public function create( array $data = [], string $dir ): array {
+
+		$file = $dir . $data[ 'file' ];
 
 		$ext = pathinfo( $file, PATHINFO_EXTENSION );
-
 		if ( ! isset( $this->resouce_map[ $ext ] ) ) {
-			return '';
+			return [];
 		}
 
 		$resource = $this->resouce_map[ $ext ]( $file );
 		$file     = $file . '.webp';
 		$success  = imagewebp( $resource, $file );
 
-		return $success ? $file : '';
+		if ( ! $success ) {
+			return [];
+		}
+
+		return [
+			'width'     => $data[ 'width' ],
+			'height'    => $data[ 'height' ],
+			'mime-type' => 'image/webp',
+			'file'      => str_replace(
+				$dir,
+				'',
+				$file
+			)
+		];
 	}
 
 }

@@ -1,26 +1,27 @@
 {
-    "name": "chrico/webpify",
-    "description": "Generating automatically WebP-images and provide them via feature detection and lazy loading.",
-    "type": "wordpress-plugin",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Christian Brückner",
-            "homepage": "https://www.chrico.info",
-            "email": "chris@chrico.info",
-            "role": "Developer"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=7"
-    },
-    "autoload": {
-        "psr-4": {
-            "WebPify\\": "src/"
-        }
-    },
-    "config": {
-        "optimize-autoloader": true
+  "name": "chrico/webpify",
+  "description": "Generating automatically WebP-images and provide them via feature detection and lazy loading.",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Christian Brückner",
+      "homepage": "https://www.chrico.info",
+      "email": "chris@chrico.info",
+      "role": "Developer"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7",
+    "pimple/pimple": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebPify\\": "src/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
 }

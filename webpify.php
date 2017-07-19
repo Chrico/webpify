@@ -13,7 +13,6 @@
 
 namespace WebPify;
 
-use WebPify\Builder\WebPImageBuilder;
 use WebPify\Model\WebPImage;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,45 +34,17 @@ function initialize() {
 			require __DIR__ . '/vendor/autoload.php';
 		}
 
-		add_filter(
-			'wp_generate_attachment_metadata',
-			function ( array $metadata, $attachment_id ): array {
+		$plugin = new WebPify( [ 'config.plugin_file' => __FILE__ ] );
+		$plugin->register( new Assets\Provider() );
+		$plugin->register( new Builder\Provider() );
+		$plugin->register( new Parser\Provider() );
+		$plugin->register( new Transformer\Provider() );
 
-				$builder = new WebPImageBuilder(
-					new Transformer\NativeExtensionTransformer(),
-					wp_get_upload_dir()
-				);
-
-				update_post_meta(
-					$attachment_id,
-					WebPImage::ID,
-					$builder->build( $metadata )
-				);
-
-				return $metadata;
-			},
-			10,
-			2
-		);
-
-		add_filter(
-			'the_content',
-			function ( $content ): string {
-
-				return ( new Parser\RegexImageParser() )->parse( $content );
-			},
-			PHP_INT_MAX
-		);
-
-		add_filter(
-			'wp_enqueue_scripts',
-			[ new Assets\Script( __FILE__ ), 'enqueue' ]
-		);
-
+		$plugin->boot();
 	}
 	catch ( \Throwable $throwable ) {
 
-		do_action( 'webpify.error', $throwable );
+		do_action( 'WebPify.error', $throwable );
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			throw $throwable;
