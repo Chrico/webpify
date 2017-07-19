@@ -2,7 +2,6 @@
 
 namespace WebPify\Parser;
 
-
 use WebPify\Attachment\WebPImage;
 
 class RegexImageParser implements ParserInterface {
@@ -30,6 +29,16 @@ class RegexImageParser implements ParserInterface {
 
 	public function parse( string $content ): string {
 
+		// Don't lazyload for feeds or previews.
+		if ( is_feed() || is_preview() ) {
+			return $content;
+		}
+
+		// Don't lazy-load if the content has already been run through previously
+		if ( FALSE !== strpos( $content, 'data-src' ) ) {
+			return $content;
+		}
+
 		return preg_replace_callback(
 			'/<img [^>]+>/',
 			function ( $match ) {
@@ -43,21 +52,23 @@ class RegexImageParser implements ParserInterface {
 	public function build_image( string $img ): string {
 
 		$attributes = $this->get_attributes( $img );
-		$webp       = new WebPImage( $attributes[ 'id' ] );
+		if ( $attributes[ 'id' ] !== '' ) {
+			$webp = new WebPImage( $attributes[ 'id' ], '' );
 
-		$webp_src = $webp->src( $attributes[ 'size' ] );
-		if ( $webp_src !== '' ) {
-			$key = WebPImage::DATA_SRC . '="' . $webp_src . '" />';
+			$webp_src = $webp->src( $attributes[ 'size' ] );
+			if ( $webp_src !== '' ) {
+				$key = WebPImage::DATA_SRC . '="' . $webp_src . '" />';
 
-			$this->replacements[ $key ] = '/>';
+				$this->replacements[ $key ] = '/>';
+			}
+
+			$webp_srcset = $webp->srcset( $attributes[ 'size' ] );
+			if ( $webp_srcset !== '' ) {
+				$key = WebPImage::DATA_SRCSET . '="' . $webp_srcset . '" />';
+
+				$this->replacements[ $key ] = '/>';
+			};
 		}
-
-		$webp_srcset = $webp->srcset( $attributes[ 'size' ] );
-		if ( $webp_srcset !== '' ) {
-			$key = WebPImage::DATA_SRCSET . '="' . $webp_srcset . '" />';
-
-			$this->replacements[ $key ] = '/>';
-		};
 
 		$output = str_replace(
 			array_values( $this->replacements ),

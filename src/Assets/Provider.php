@@ -19,6 +19,10 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 	public function boot( Container $plugin ) {
 
+		if ( is_admin() ) {
+			return;
+		}
+
 		add_filter( 'wp_enqueue_scripts', [ $plugin[ Script::class ], 'enqueue' ] );
 
 		add_filter(
