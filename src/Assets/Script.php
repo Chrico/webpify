@@ -26,7 +26,7 @@ class Script {
 			$this->url(),
 			[],
 			NULL,
-			TRUE
+			FALSE
 		);
 	}
 
@@ -35,7 +35,7 @@ class Script {
 	 */
 	private function url(): string {
 
-		$file_name = self::HANDLE . ( $this->is_debug() ? '.min.js' : '.js' );
+		$file_name = self::HANDLE . ( $this->is_debug() ? '.js' : '.min.js' );
 		$subdir    = '/assets/js/dist';
 
 		$url = plugins_url( "{$subdir}/{$file_name}", $this->plugin_file_path );
