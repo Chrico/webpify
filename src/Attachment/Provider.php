@@ -5,7 +5,7 @@ namespace WebPify\Attachment;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use WebPify\Core\BootableProviderInterface;
-use WebPify\Transformer\NativeExtensionTransformer;
+use WebPify\Transformer\ImageTransformerInterface;
 
 final class Provider implements ServiceProviderInterface, BootableProviderInterface {
 
@@ -14,7 +14,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 		$plugin[ MetaDataImageGenerator::class ] = function ( Container $plugin ): MetaDataImageGenerator {
 
 			return new MetaDataImageGenerator(
-				$plugin[ NativeExtensionTransformer::class ],
+				$plugin[ ImageTransformerInterface::class ],
 				wp_get_upload_dir()
 			);
 		};

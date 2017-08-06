@@ -4,7 +4,7 @@ namespace WebPify\Transformer;
 
 class NativeExtensionTransformer implements ImageTransformerInterface {
 
-	private $resouce_map = [
+	private $image_functions = [
 		'jpg'  => 'imagecreatefromjpeg',
 		'jpeg' => 'imagecreatefromjpeg',
 		'png'  => 'imagecreatefrompng'
@@ -15,18 +15,30 @@ class NativeExtensionTransformer implements ImageTransformerInterface {
 		$file = $dir . $data[ 'file' ];
 
 		$ext = pathinfo( $file, PATHINFO_EXTENSION );
-		if ( ! isset( $this->resouce_map[ $ext ] ) ) {
+		if ( ! isset( $this->image_functions[ $ext ] ) ) {
 
 			do_action(
 				'WebPify.error',
 				sprintf( 'Could not find "%s" in available extension.', $ext ),
-				[ 'extensions' => $this->resouce_map ]
+				[ 'image_functions' => $this->image_functions ]
 			);
 
 			return [];
 		}
 
-		$resource = $this->resouce_map[ $ext ]( $file );
+		$func = $this->image_functions[ $ext ];
+		if ( ! function_exists( $func ) ) {
+
+			do_action(
+				'WebPify.error',
+				sprintf( 'The extension "%s" is not available.', $ext ),
+				[ 'image_functions' => $this->image_functions, 'extension' => $ext ]
+			);
+
+			return [];
+		}
+
+		$resource = $func( $file );
 		$file     = $file . '.webp';
 		$success  = imagewebp( $resource, $file );
 		imagedestroy( $resource );
@@ -34,8 +46,8 @@ class NativeExtensionTransformer implements ImageTransformerInterface {
 		if ( ! $success ) {
 
 			$context = [
-				'file'       => $file,
-				'extensions' => $this->resouce_map
+				'file'            => $file,
+				'image_functions' => $this->image_functions
 			];
 
 			do_action(

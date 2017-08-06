@@ -9,9 +9,11 @@ final class Provider implements ServiceProviderInterface {
 
 	public function register( Container $plugin ) {
 
-		$plugin[ NativeExtensionTransformer::class ] = function (): NativeExtensionTransformer {
+		$plugin[ ImageTransformerInterface::class ] = function (): ImageTransformerInterface {
 
-			return new NativeExtensionTransformer();
+			return function_exists( 'imagewebp' )
+				? new NativeExtensionTransformer()
+				: new NullTransformer();
 		};
 
 	}
