@@ -83,6 +83,10 @@ class WebPImage {
 		}
 
 		$src    = $this->src( $size );
+		if ( $src === '' ) {
+			return '';
+		}
+
 		$size   = $this->size( $size );
 		$srcset = wp_calculate_image_srcset(
 			[ $size[ 'width' ], $size[ 'height' ] ],

@@ -24,13 +24,19 @@ class MetaDataImageGenerator {
 
 	public function generate( array $metadata, $attachment_id ): bool {
 
-		$webp_metadata = $this->generate_full( $metadata );
+		// we've to use the "basedir" for the "full"-image.
+		$dir = trailingslashit( $this->upload_dir[ 'basedir' ] );
+		$webp_metadata = $this->transformer->create( $metadata, $dir );
+
 		if ( empty( $webp_metadata ) ) {
 
 			return FALSE;
 		}
 
-		$webp_metadata[ 'sizes' ] = $this->generate_sizes( $metadata[ 'sizes' ] );
+		// append the subdir from full image.
+		$dir .= trailingslashit( dirname( $metadata[ 'file' ] ) );
+
+		$webp_metadata[ 'sizes' ] = $this->generate_sizes( $metadata[ 'sizes' ], $dir );
 
 		return (bool) update_post_meta(
 			$attachment_id,
@@ -40,32 +46,15 @@ class MetaDataImageGenerator {
 	}
 
 	/**
-	 * Generate for "full"-image the webp-version.
-	 *
-	 * @param array $metadata
-	 *
-	 * @return array
-	 */
-	private function generate_full( array $metadata = [] ): array {
-
-		// we've to use the "basedir" for the "full"-image.
-		$dir = trailingslashit( $this->upload_dir[ 'basedir' ] );
-
-		return $this->transformer->create( $metadata, $dir );
-	}
-
-	/**
 	 * Generate for all available "sizes" the webp-version.
 	 *
 	 * @param array $sizes
+	 * @param string $dir
 	 *
 	 * @return array
 	 */
-	private function generate_sizes( array $sizes = [] ): array {
-
-		$dir         = trailingslashit( $this->upload_dir[ 'path' ] );
+	private function generate_sizes( array $sizes = [], string $dir ): array {
 		$build_sizes = [];
-
 		foreach ( $sizes as $size => $data ) {
 			$webp_data = $this->transformer->create( $data, $dir );
 			if ( isset( $webp_data[ 'file' ] ) ) {
