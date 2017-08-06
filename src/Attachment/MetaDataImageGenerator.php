@@ -22,27 +22,40 @@ class MetaDataImageGenerator {
 		$this->upload_dir    = $upload_dir;
 	}
 
-	public function generate( array $metadata, $attachment_id ): bool {
+	public function generate( array $metadata, $attachment_id ): array {
 
-		// we've to use the "basedir" for the "full"-image.
+		// we've to use the "basedir" for the "full"-image,
+		// because the "file" already contains the subdir.
 		$dir = trailingslashit( $this->upload_dir[ 'basedir' ] );
 		$webp_metadata = $this->transformer->create( $metadata, $dir );
 
 		if ( empty( $webp_metadata ) ) {
 
-			return FALSE;
+			return $metadata;
 		}
 
-		// append the subdir from full image.
+		// append the subdir from full image,
+		// because the "sizes" are stored only with filename.
 		$dir .= trailingslashit( dirname( $metadata[ 'file' ] ) );
 
 		$webp_metadata[ 'sizes' ] = $this->generate_sizes( $metadata[ 'sizes' ], $dir );
 
-		return (bool) update_post_meta(
+		$success = (bool) update_post_meta(
 			$attachment_id,
 			WebPImage::ID,
 			$webp_metadata
 		);
+		if ( ! $success ) {
+			// Note: WP returns "false" when the existing PostMeta is equal to the new one.
+			// So no panic when update_post_meta returns false.
+			do_action(
+				'WebPify.error',
+				'An error occured while updating the WebP-metadata.',
+				[ 'metadata' => $metadata, 'webp_metadata' => $webp_metadata ]
+			);
+		}
+
+		return $metadata;
 	}
 
 	/**
