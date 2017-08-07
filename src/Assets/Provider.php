@@ -38,7 +38,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 					);
 
 					$tag = sprintf(
-						'<script async>%s</script>',
+						'<script>%s</script>',
 						file_get_contents( $src )
 					);
 				}
