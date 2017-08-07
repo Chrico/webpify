@@ -3,9 +3,9 @@ import LazyLoad from '../../../node_modules/vanilla-lazyload/dist/lazyload.es201
 // detect if a image has the "data-web-src"- or "data-web-srcset"-attributes
 // and replace the default "data-src" and/or "data-srcset"-attributes with it.
 const maybeReplaceDefaultImages = () => {
-	Array
-		.from( document.querySelectorAll( 'img' ) )
-		.forEach( $el => {
+	[].forEach.call(
+		document.querySelectorAll( 'img' ),
+		$el => {
 			const attributes = [
 				{
 					'to'  : 'data-src',
@@ -17,14 +17,13 @@ const maybeReplaceDefaultImages = () => {
 				}
 			];
 			attributes.forEach( search => {
-				console.log( search );
 				if ( $el.hasAttribute( search.from ) ) {
 					$el.setAttribute( search.to, $el.getAttribute( search.from ) );
 					$el.removeAttribute( search.from );
 				}
 			} );
-		} );
-
+		}
+	);
 };
 
 const initializeLazyLoad = () => {
