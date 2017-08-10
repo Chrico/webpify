@@ -40,7 +40,7 @@ class NativeExtensionTransformer implements ImageTransformerInterface {
 
 		$resource = $func( $file );
 		$file     = $file . '.webp';
-		$success  = imagewebp( $resource, $file );
+		$success  = @imagewebp( $resource, $file );
 		imagedestroy( $resource );
 
 		if ( ! $success ) {

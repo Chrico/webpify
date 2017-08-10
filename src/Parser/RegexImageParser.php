@@ -2,20 +2,9 @@
 
 namespace WebPify\Parser;
 
-use WebPify\Attachment\WebPImage;
+use WebPify\Renderer\ImageRenderInterface;
 
-class RegexImageParser implements ParserInterface {
-
-	/**
-	 * Replacements "to" mapped to "from".
-	 *
-	 * @var array
-	 */
-	private $replacements = [
-		'data-src="'                               => 'src="',
-		'data-srcset="'                            => 'srcset="',
-		'src="' . WebPImage::BASE64_IMAGE . '" />' => '/>',
-	];
+final class RegexImageParser implements ParserInterface {
 
 	/**
 	 * RegExes to parse the <img>-tag and collect required values.
@@ -26,6 +15,22 @@ class RegexImageParser implements ParserInterface {
 		'id'   => '/wp-image-([0-9]+)/i',
 		'size' => '/size-([a-z]+)/i'
 	];
+
+	/**
+	 * @var ImageRenderInterface
+	 */
+	private $renderer;
+
+	/**
+	 * RegexImageParser constructor.
+	 *
+	 * @param ImageRenderInterface $renderer
+	 */
+	public function __construct( ImageRenderInterface $renderer ) {
+
+		$this->renderer = $renderer;
+
+	}
 
 	public function parse( string $content ): string {
 
@@ -43,41 +48,13 @@ class RegexImageParser implements ParserInterface {
 			'/<img [^>]+>/',
 			function ( $match ) {
 
-				return $this->build_image( $match[ 0 ] );
+				$img        = $match[ 0 ];
+				$attributes = $this->get_attributes( $img );
+
+				return $this->renderer->render( $img, (int) $attributes[ 'id' ], $attributes[ 'size' ] );
 			},
 			$content
 		);
-	}
-
-	public function build_image( string $img ): string {
-
-		$attributes = $this->get_attributes( $img );
-		if ( $attributes[ 'id' ] !== '' ) {
-			$webp = new WebPImage( $attributes[ 'id' ], '' );
-
-			$webp_src = $webp->src( $attributes[ 'size' ] );
-			if ( $webp_src !== '' ) {
-				$key = WebPImage::DATA_SRC . '="' . $webp_src . '" />';
-
-				$this->replacements[ $key ] = '/>';
-			}
-
-			$webp_srcset = $webp->srcset( $attributes[ 'size' ] );
-			if ( $webp_srcset !== '' ) {
-				$key = WebPImage::DATA_SRCSET . '="' . $webp_srcset . '" />';
-
-				$this->replacements[ $key ] = '/>';
-			};
-		}
-
-		$output = str_replace(
-			array_values( $this->replacements ),
-			array_keys( $this->replacements ),
-			$img
-		);
-		$output .= '<noscript>' . $img . '</noscript>';
-
-		return $output;
 	}
 
 	/**

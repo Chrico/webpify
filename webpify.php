@@ -37,6 +37,7 @@ function initialize() {
 		$plugin = new WebPify( [ 'config.plugin_file' => __FILE__ ] );
 		$plugin->register( new Assets\Provider() );
 		$plugin->register( new Attachment\Provider() );
+		$plugin->register( new Renderer\Provider() );
 		$plugin->register( new Parser\Provider() );
 		$plugin->register( new Transformer\Provider() );
 
