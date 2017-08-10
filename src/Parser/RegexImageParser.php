@@ -13,7 +13,7 @@ final class RegexImageParser implements ParserInterface {
 	 */
 	private $regex_search = [
 		'id'   => '/wp-image-([0-9]+)/i',
-		'size' => '/size-([a-z]+)/i'
+		'size' => '/size-([A-Za-z-_]+)/i'
 	];
 
 	/**
