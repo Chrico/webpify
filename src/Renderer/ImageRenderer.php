@@ -11,13 +11,15 @@ class ImageRenderer implements ImageRenderInterface {
 	 *
 	 * @var array
 	 */
-	private $replacements = [
+	private $default_replacements = [
 		'data-src="'                               => 'src="',
 		'data-srcset="'                            => 'srcset="',
 		'src="' . WebPImage::BASE64_IMAGE . '" />' => '/>',
 	];
 
-	public function render( string $img, int $attachment_id, string $size ) : string {
+	public function render( string $img, int $attachment_id, string $size ): string {
+
+		$replacments = $this->default_replacements;
 
 		if ( $attachment_id !== 0 ) {
 			$webp = new WebPImage( $attachment_id );
@@ -26,20 +28,20 @@ class ImageRenderer implements ImageRenderInterface {
 			if ( $webp_src !== '' ) {
 				$key = WebPImage::DATA_SRC . '="' . $webp_src . '" />';
 
-				$this->replacements[ $key ] = '/>';
+				$replacments[ $key ] = '/>';
 			}
 
 			$webp_srcset = $webp->srcset( $size );
 			if ( $webp_srcset !== '' ) {
 				$key = WebPImage::DATA_SRCSET . '="' . $webp_srcset . '" />';
 
-				$this->replacements[ $key ] = '/>';
+				$replacments[ $key ] = '/>';
 			};
 		}
 
 		$output = str_replace(
-			array_values( $this->replacements ),
-			array_keys( $this->replacements ),
+			array_values( $replacmentss ),
+			array_keys( $replacments ),
 			$img
 		);
 
