@@ -5,15 +5,17 @@ namespace WebPify\Transformer;
 interface ImageTransformerInterface {
 
 	/**
-	 * @param array $data    [
-	 *                       'width'    => int,
-	 *                       'height'   => int,
-	 *                       'file'     => string,
-	 *                       'type'     => string
-	 *                     ]
-	 * @param string $dir   the full path to the file.
+	 * @param string $source_file the source file with full path in file-system.
+	 * @param string $dest_file   the destination file
 	 *
-	 * @return array
+	 * @return bool     TRUE if successfully created | FALSE if an error occurred.
 	 */
-	public function create( array $data = [], string $dir ): array;
+	public function create( string $source_file, string $dest_file ): bool;
+
+	/**
+	 * Function to detect, if the current Transformer is available.
+	 *
+	 * @return bool
+	 */
+	public function is_activated(): bool;
 }

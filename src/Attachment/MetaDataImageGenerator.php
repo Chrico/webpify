@@ -19,32 +19,34 @@ class MetaDataImageGenerator {
 	public function __construct( ImageTransformerInterface $transformer, array $upload_dir ) {
 
 		$this->transformer = $transformer;
-		$this->upload_dir    = $upload_dir;
+		$this->upload_dir  = $upload_dir;
 	}
 
 	public function generate( array $metadata, $attachment_id ): array {
 
 		// we've to use the "basedir" for the "full"-image,
 		// because the "file" already contains the subdir.
-		$dir = trailingslashit( $this->upload_dir[ 'basedir' ] );
-		$webp_metadata = $this->transformer->create( $metadata, $dir );
-
-		if ( empty( $webp_metadata ) ) {
-
-			return $metadata;
-		}
+		$dir           = trailingslashit( $this->upload_dir[ 'basedir' ] );
+		$webp_metadata = $this->create_metadata( $metadata, $dir );
 
 		// append the subdir from full image,
 		// because the "sizes" are stored only with filename.
 		$dir .= trailingslashit( dirname( $metadata[ 'file' ] ) );
-
-		$webp_metadata[ 'sizes' ] = $this->generate_sizes( $metadata[ 'sizes' ], $dir );
+		// create all sizes.
+		$webp_metadata[ 'sizes' ] = [];
+		foreach ( $metadata[ 'sizes' ] as $size => $data ) {
+			$webp_data = $this->create_metadata( $data, $dir );
+			if ( isset( $webp_data[ 'file' ] ) ) {
+				$webp_metadata[ 'sizes' ][ $size ] = $webp_data;
+			}
+		}
 
 		$success = (bool) update_post_meta(
 			$attachment_id,
 			WebPImage::ID,
 			$webp_metadata
 		);
+
 		if ( ! $success ) {
 			// Note: WP returns "false" when the existing PostMeta is equal to the new one.
 			// So no panic when update_post_meta returns false.
@@ -59,23 +61,28 @@ class MetaDataImageGenerator {
 	}
 
 	/**
-	 * Generate for all available "sizes" the webp-version.
+	 * Internal function to create the metadata.
 	 *
-	 * @param array $sizes
+	 * @param array  $data
 	 * @param string $dir
 	 *
 	 * @return array
 	 */
-	private function generate_sizes( array $sizes = [], string $dir ): array {
-		$build_sizes = [];
-		foreach ( $sizes as $size => $data ) {
-			$webp_data = $this->transformer->create( $data, $dir );
-			if ( isset( $webp_data[ 'file' ] ) ) {
-				$build_sizes[ $size ] = $webp_data;
-			}
+	private function create_metadata( array $data, string $dir ): array {
+
+		$source_file = $dir . $data[ 'file' ];
+		$dest_file   = $source_file . '.webp';
+
+		if ( ! $this->transformer->create( $source_file, $dest_file ) ) {
+			return [];
 		}
 
-		return $build_sizes;
+		return [
+			'width'     => $data[ 'width' ],
+			'height'    => $data[ 'height' ],
+			'mime-type' => 'image/webp',
+			'file'      => str_replace( $dir, '', $dest_file )
+		];
 	}
 
 }

@@ -4,9 +4,13 @@ namespace WebPify\Transformer;
 
 class NullTransformer implements ImageTransformerInterface {
 
-	public function create( array $data = [], string $dir ): array {
+	public function create( string $source_file, string $dest_file ): bool {
 
-		return [];
+		return FALSE;
 	}
 
+	public function is_activated(): bool {
+
+		return TRUE;
+	}
 }
