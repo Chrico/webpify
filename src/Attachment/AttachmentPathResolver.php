@@ -10,62 +10,81 @@ class AttachmentPathResolver {
 	const TYPE_DIR = 'basedir';
 	const TYPE_URL = 'baseurl';
 
+	private $meta = [];
+
+	private $uploads_dir = [];
+
+	/**
+	 * @param array $attachment_meta
+	 *
+	 * @return AttachmentPathResolver
+	 */
+	public static function for_meta( array $attachment_meta ): AttachmentPathResolver {
+
+		return new static( $attachment_meta );
+	}
+
+	/**
+	 * @param array $attachment_meta
+	 */
+	public function __construct( array $attachment_meta ) {
+
+		$this->meta        = $attachment_meta;
+		$this->uploads_dir = wp_get_upload_dir();
+	}
+
 	/**
 	 * Returns the full path for an attachment.
 	 *
-	 * @param array  $attachment_meta
 	 * @param string $size
 	 *
 	 * @return string
 	 */
-	public static function dir( array $attachment_meta, string $size ): string {
+	public function dir( string $size ): string {
 
-		return self::get( $attachment_meta, $size, self::TYPE_DIR );
+		return $this->resolve( $size, self::TYPE_DIR );
 	}
 
 	/**
-	 * @param array  $attachment_meta
 	 * @param string $size
 	 * @param string $type
 	 *
 	 * @return string full path/url to file
 	 */
-	private static function get( array $attachment_meta, string $size, string $type ): string {
+	private function resolve( string $size, string $type ): string {
 
-		$upload_dir = wp_get_upload_dir();
-		$dir        = trailingslashit( $upload_dir[ $type ] );
+		$dir = trailingslashit( $this->uploads_dir[ $type ] );
 
 		// the full is always required either for..
 		// ... returning the full
 		// ... or getting the sub-dir for a specific size.
-		if ( ! isset( $attachment_meta[ 'file' ] ) ) {
+		if ( ! isset( $this->meta[ 'file' ] ) ) {
 			return '';
 		}
 
-		$full = $attachment_meta[ 'file' ];
+		$full = $this->meta[ 'file' ];
 
 		if ( $size === 'full' ) {
 			return $dir . $full;
-		} elseif ( isset( $attachment_meta[ 'sizes' ][ $size ][ 'file' ] ) ) {
+		} elseif ( isset( $this->meta[ 'sizes' ][ $size ][ 'file' ] ) ) {
 
 			$dir .= trailingslashit( _wp_get_attachment_relative_path( $full ) );
 
-			return $dir . $attachment_meta[ 'sizes' ][ $size ][ 'file' ];
+			return $dir . $this->meta[ 'sizes' ][ $size ][ 'file' ];
 		} else {
 			return '';
 		}
 	}
 
 	/**
-	 * Returns the full URL for an attachment,
+	 * Returns the full URL for to an attachment.
 	 *
-	 * @param array  $attachment_meta
 	 * @param string $size
 	 *
 	 * @return string
 	 */
-	public static function url( array $attachment_meta, string $size ): string {
+	public function url( string $size ): string {
 
-		return self::get( $attachment_meta, $size, self::TYPE_URL );
+		return $this->resolve( $size, self::TYPE_URL );
 	}
 }

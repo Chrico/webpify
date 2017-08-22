@@ -30,6 +30,11 @@ class WebPAttachment {
 	];
 
 	/**
+	 * @var AttachmentPathResolver
+	 */
+	private $attachment_path_resolver;
+
+	/**
 	 * WebPImage constructor.
 	 *
 	 * @param int $id
@@ -42,7 +47,8 @@ class WebPAttachment {
 		if ( $meta === '' ) {
 			$meta = [];
 		}
-		$this->meta = array_merge( $this->meta, $meta );
+		$this->meta                     = array_merge( $this->meta, $meta );
+		$this->attachment_path_resolver = AttachmentPathResolver::for_meta( $this->meta );
 	}
 
 	public function srcset( string $size ): string {
@@ -65,7 +71,7 @@ class WebPAttachment {
 
 	public function src( string $size ): string {
 
-		return AttachmentPathResolver::url( $this->meta, $size );
+		return $this->attachment_path_resolver->url( $size );
 	}
 
 	public function size( string $size ): array {
@@ -104,8 +110,9 @@ class WebPAttachment {
 	 */
 	public function diff_filesize( array $original_meta, string $size ): int {
 
-		$webp_file     = AttachmentPathResolver::dir( $this->meta(), $size );
-		$original_file = AttachmentPathResolver::dir( $original_meta, $size );
+		$webp_file     = $this->attachment_path_resolver->dir( $size );
+		$original_file = AttachmentPathResolver::for_meta( $original_meta )
+			->dir( $size );
 
 		if ( $webp_file === '' || $original_file === '' ) {
 			return 0;
