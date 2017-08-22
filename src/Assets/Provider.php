@@ -26,28 +26,14 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 			return;
 		}
 
-		add_filter( 'wp_enqueue_scripts', [ $plugin[ Script::class ], 'enqueue' ] );
+		add_filter(
+			'wp_enqueue_scripts',
+			[ $plugin[ Script::class ], 'enqueue' ]
+		);
 
 		add_filter(
 			'script_loader_tag',
-			function ( $tag, $handle ) {
-
-				if ( $handle === Script::HANDLE ) {
-
-					$src = str_replace(
-						home_url( '/wp-content' ),
-						WP_CONTENT_DIR,
-						wp_scripts()->registered[ $handle ]->src
-					);
-
-					$tag = sprintf(
-						'<script>%s</script>',
-						file_get_contents( $src )
-					);
-				}
-
-				return $tag;
-			},
+			[ $plugin[ Script::class ], 'print_inline' ],
 			10,
 			2
 		);
