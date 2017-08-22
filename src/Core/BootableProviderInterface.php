@@ -5,8 +5,6 @@ namespace WebPify\Core;
 use Pimple\Container;
 
 /**
- * Interface BootableProviderInterface
- *
  * @package WebPify\Core;
  */
 interface BootableProviderInterface {

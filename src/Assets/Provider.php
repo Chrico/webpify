@@ -6,6 +6,9 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use WebPify\Core\BootableProviderInterface;
 
+/**
+ * @package WebPify\Assets
+ */
 final class Provider implements ServiceProviderInterface, BootableProviderInterface {
 
 	public function register( Container $plugin ) {

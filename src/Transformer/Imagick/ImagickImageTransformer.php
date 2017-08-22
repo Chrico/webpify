@@ -6,14 +6,12 @@ use WebPify\Transformer\ImageTransformerInterface;
 use WP_CLI\Iterators\Exception;
 
 /**
- * Class ImagickImageTransformer
- *
  * @package WebPify\Transformer\Imagick
  *
  * @link    http://www.imagemagick.org/script/webp.php
  * @link    https://stackoverflow.com/questions/37711492/imagemagick-specific-webp-calls-in-php
  */
-class ImagickImageTransformer implements ImageTransformerInterface {
+final class ImagickImageTransformer implements ImageTransformerInterface {
 
 	public function create( string $source_file, string $dest_file ): bool {
 

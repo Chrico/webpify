@@ -4,7 +4,10 @@ namespace WebPify\Transformer\GD;
 
 use WebPify\Transformer\ImageTransformerInterface;
 
-class GDImageTransformer implements ImageTransformerInterface {
+/**
+ * @package WebPify\Transformer\GD
+ */
+final class GDImageTransformer implements ImageTransformerInterface {
 
 	private $image_functions = [
 		'jpg'  => 'imagecreatefromjpeg',

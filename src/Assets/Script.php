@@ -2,7 +2,10 @@
 
 namespace WebPify\Assets;
 
-class Script {
+/**
+ * @package WebPify\Assets
+ */
+final class Script {
 
 	const HANDLE = 'webpify';
 
@@ -26,7 +29,7 @@ class Script {
 			$this->url(),
 			[],
 			NULL,
-			FALSE
+			TRUE
 		);
 	}
 

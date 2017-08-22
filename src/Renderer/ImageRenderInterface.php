@@ -2,6 +2,9 @@
 
 namespace WebPify\Renderer;
 
+/**
+ * @package WebPify\Renderer
+ */
 interface ImageRenderInterface {
 
 	/**

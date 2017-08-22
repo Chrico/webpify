@@ -1,12 +1,10 @@
 # TODO
 
 
-* Detect if `imagewebp` is available.
-* Options page.
-* Dashboard with stats.
+* Configurations
+  * Which transformer
+  * Quality of WebP image.
 * More info about state in...
   * `/wp-admin/upload.php` (new column)
   * "Media Edit"-Modal (image detail)
-* Bulk edit of images (WP-CLI?).
-* More hooks to enable access for third party plugins.
-* Maybe improve the JS initialization. 
+* More hooks to enable access for third party plugins. 

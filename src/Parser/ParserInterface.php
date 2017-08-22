@@ -2,6 +2,9 @@
 
 namespace WebPify\Parser;
 
+/**
+ * @package WebPify\Parser
+ */
 interface ParserInterface {
 
 	public function parse( string $content ): string;

@@ -2,6 +2,9 @@
 
 namespace WebPify\Transformer;
 
+/**
+ * @package WebPify\Transformer
+ */
 interface ImageTransformerInterface {
 
 	/**

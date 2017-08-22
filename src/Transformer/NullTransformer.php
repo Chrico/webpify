@@ -2,6 +2,9 @@
 
 namespace WebPify\Transformer;
 
+/**
+ * @package WebPify\Transformer
+ */
 class NullTransformer implements ImageTransformerInterface {
 
 	public function create( string $source_file, string $dest_file ): bool {

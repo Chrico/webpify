@@ -4,6 +4,9 @@ namespace WebPify\Parser;
 
 use WebPify\Renderer\ImageRenderInterface;
 
+/**
+ * @package WebPify\Parser
+ */
 final class RegexImageParser implements ParserInterface {
 
 	/**

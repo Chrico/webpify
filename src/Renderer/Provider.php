@@ -5,6 +5,9 @@ namespace WebPify\Renderer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
+/**
+ * @package WebPify\Renderer
+ */
 final class Provider implements ServiceProviderInterface {
 
 	public function register( Container $plugin ) {

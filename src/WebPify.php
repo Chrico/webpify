@@ -5,7 +5,10 @@ namespace WebPify;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class WebPify extends Container {
+/**
+ * @package WebPify
+ */
+final class WebPify extends Container {
 
 	/**
 	 * @var bool

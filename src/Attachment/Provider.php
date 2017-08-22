@@ -4,9 +4,13 @@ namespace WebPify\Attachment;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use WebPify\Attachment\Column\MediaEditColumn;
 use WebPify\Core\BootableProviderInterface;
 use WebPify\Transformer\ImageTransformerInterface;
 
+/**
+ * @package WebPify\Attachment
+ */
 final class Provider implements ServiceProviderInterface, BootableProviderInterface {
 
 	public function register( Container $plugin ) {
@@ -19,6 +23,10 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 			);
 		};
 
+		$plugin[ MediaEditColumn::class ] = function (): MediaEditColumn {
+
+			return new MediaEditColumn();
+		};
 	}
 
 	public function boot( Container $plugin ) {
@@ -29,6 +37,20 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 			10,
 			2
 		);
+
+		if ( is_admin() ) {
+
+			add_filter(
+				'manage_media_columns',
+				[ $plugin[ MediaEditColumn::class ], 'title' ]
+			);
+
+			add_filter(
+				'manage_media_custom_column',
+				[ $plugin[ MediaEditColumn::class ], 'content' ], 10, 2
+			);
+
+		}
 
 	}
 }

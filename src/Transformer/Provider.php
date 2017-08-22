@@ -7,6 +7,9 @@ use Pimple\ServiceProviderInterface;
 use WebPify\Transformer\GD\GDImageTransformer;
 use WebPify\Transformer\Imagick\ImagickImageTransformer;
 
+/**
+ * @package WebPify\Transformer
+ */
 final class Provider implements ServiceProviderInterface {
 
 	public function register( Container $plugin ) {
@@ -31,7 +34,7 @@ final class Provider implements ServiceProviderInterface {
 			$classes = [ ImagickImageTransformer::class, GDImageTransformer::class ];
 			foreach ( $classes as $class ) {
 				if ( $plugin[ $class ]->is_activated() ) {
-					return $class;
+					return $plugin[ $class ];
 				}
 			}
 

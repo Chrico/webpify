@@ -2,7 +2,10 @@
 
 namespace WebPify\Attachment;
 
-class WebPImage {
+/**
+ * @package WebPify\Attachment
+ */
+class WebPAttachment {
 
 	const ID = '_webpify_attachment_meta';
 
@@ -29,11 +32,6 @@ class WebPImage {
 	private $default_size = 'full';
 
 	/**
-	 * @var array
-	 */
-	private $upload_dir;
-
-	/**
 	 * WebPImage constructor.
 	 *
 	 * @param int    $id
@@ -48,8 +46,7 @@ class WebPImage {
 		if ( $meta === '' ) {
 			$meta = [];
 		}
-		$this->meta       = array_merge( $this->meta, $meta );
-		$this->upload_dir = wp_get_upload_dir();
+		$this->meta = array_merge( $this->meta, $meta );
 	}
 
 	public function src( string $size = '' ): string {
@@ -58,22 +55,7 @@ class WebPImage {
 			$size = $this->default_size;
 		}
 
-		$full     = $this->meta[ 'file' ];
-		$base_dir = trailingslashit( $this->upload_dir[ 'baseurl' ] );
-		$sub_dir  = trailingslashit( _wp_get_attachment_relative_path( $full ) );
-
-		if ( $size === 'full' ) {
-
-			return $base_dir . $full;
-
-		} elseif ( isset( $this->meta[ 'sizes' ][ $size ] ) ) {
-
-			$file = $this->meta[ 'sizes' ][ $size ][ 'file' ];
-
-			return $base_dir . $sub_dir . $file;
-		}
-
-		return '';
+		return AttachmentPathResolver::url( $this->meta, $size );
 	}
 
 	public function srcset( string $size = '' ): string {
@@ -82,22 +64,18 @@ class WebPImage {
 			$size = $this->default_size;
 		}
 
-		$src    = $this->src( $size );
+		$src = $this->src( $size );
 		if ( $src === '' ) {
 			return '';
 		}
 
 		$size   = $this->size( $size );
-		$srcset = wp_calculate_image_srcset(
+		$srcset = (string) wp_calculate_image_srcset(
 			[ $size[ 'width' ], $size[ 'height' ] ],
 			$src,
 			$this->meta,
 			$this->id
 		);
-
-		if ( ! $srcset ) {
-			return '';
-		}
 
 		return $srcset;
 	}
@@ -122,12 +100,12 @@ class WebPImage {
 		return [];
 	}
 
-	public function sizes() {
+	public function sizes(): array {
 
 		return $this->meta[ 'sizes' ];
 	}
 
-	public function size_exists( string $size = '' ) {
+	public function size_exists( string $size = '' ): bool {
 
 		if ( $size === '' ) {
 			$size = $this->default_size;
@@ -136,5 +114,28 @@ class WebPImage {
 		return ( $size === 'full' )
 			? $this->meta[ 'file' ] !== ''
 			: isset( $this->meta[ 'sizes' ][ $size ] );
+	}
+
+	public function meta(): array {
+
+		return $this->meta;
+	}
+
+	/**
+	 * @param array  $original_meta
+	 * @param string $size
+	 *
+	 * @return int filesize in bytes.
+	 */
+	public function diff_filesize( array $original_meta, string $size ): int {
+
+		$webp_file     = AttachmentPathResolver::dir( $this->meta(), $size );
+		$original_file = AttachmentPathResolver::dir( $original_meta, $size );
+
+		if ( $webp_file === '' || $original_file === '' ) {
+			return 0;
+		}
+
+		return filesize( $webp_file ) - filesize( $original_file );
 	}
 }

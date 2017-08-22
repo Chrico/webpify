@@ -13,7 +13,7 @@
 
 namespace WebPify;
 
-use WebPify\Attachment\WebPImage;
+use WebPify\Attachment\WebPAttachment;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	return;
@@ -30,7 +30,7 @@ function initialize() {
 
 	try {
 
-		if ( ! class_exists( WebPImage::class ) && file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+		if ( ! class_exists( WebPAttachment::class ) && file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 			require __DIR__ . '/vendor/autoload.php';
 		}
 

@@ -4,6 +4,9 @@ namespace WebPify\Attachment;
 
 use WebPify\Transformer\ImageTransformerInterface;
 
+/**
+ * @package WebPify\Attachment
+ */
 class MetaDataImageGenerator {
 
 	/**
@@ -16,13 +19,23 @@ class MetaDataImageGenerator {
 	 */
 	private $upload_dir;
 
+	/**
+	 * @param ImageTransformerInterface $transformer
+	 * @param array                     $upload_dir
+	 */
 	public function __construct( ImageTransformerInterface $transformer, array $upload_dir ) {
 
 		$this->transformer = $transformer;
 		$this->upload_dir  = $upload_dir;
 	}
 
-	public function generate( array $metadata, $attachment_id ): array {
+	/**
+	 * @param array $metadata
+	 * @param int $attachment_id
+	 *
+	 * @return array
+	 */
+	public function generate( array $metadata, int $attachment_id ): array {
 
 		// we've to use the "basedir" for the "full"-image,
 		// because the "file" already contains the subdir.
@@ -43,7 +56,7 @@ class MetaDataImageGenerator {
 
 		$success = (bool) update_post_meta(
 			$attachment_id,
-			WebPImage::ID,
+			WebPAttachment::ID,
 			$webp_metadata
 		);
 
