@@ -19,5 +19,4 @@ final class Provider implements ServiceProviderInterface {
 
 	}
 
-
 }

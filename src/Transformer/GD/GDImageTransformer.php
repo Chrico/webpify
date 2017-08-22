@@ -36,6 +36,8 @@ final class GDImageTransformer implements ImageTransformerInterface {
 		}
 
 		$func = $this->image_functions[ $ext ];
+		// adding the selected function to error context for debugging.
+		$error_context[ 'func' ] = $func;
 		if ( ! function_exists( $func ) ) {
 
 			do_action(

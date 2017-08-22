@@ -31,7 +31,7 @@ class MetaDataImageGenerator {
 
 	/**
 	 * @param array $metadata
-	 * @param int $attachment_id
+	 * @param int   $attachment_id
 	 *
 	 * @return array
 	 */

@@ -24,19 +24,6 @@ class AttachmentPathResolver {
 	}
 
 	/**
-	 * Returns the full URL for an attachment,
-	 *
-	 * @param array  $attachment_meta
-	 * @param string $size
-	 *
-	 * @return string
-	 */
-	public static function url( array $attachment_meta, string $size ): string {
-
-		return self::get( $attachment_meta, $size, self::TYPE_URL );
-	}
-
-	/**
 	 * @param array  $attachment_meta
 	 * @param string $size
 	 * @param string $type
@@ -67,5 +54,18 @@ class AttachmentPathResolver {
 		} else {
 			return '';
 		}
+	}
+
+	/**
+	 * Returns the full URL for an attachment,
+	 *
+	 * @param array  $attachment_meta
+	 * @param string $size
+	 *
+	 * @return string
+	 */
+	public static function url( array $attachment_meta, string $size ): string {
+
+		return self::get( $attachment_meta, $size, self::TYPE_URL );
 	}
 }

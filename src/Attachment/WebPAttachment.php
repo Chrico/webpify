@@ -29,18 +29,14 @@ class WebPAttachment {
 		'sizes'  => []
 	];
 
-	private $default_size = 'full';
-
 	/**
 	 * WebPImage constructor.
 	 *
-	 * @param int    $id
-	 * @param string $default_size
+	 * @param int $id
 	 */
-	public function __construct( $id, string $default_size = 'full' ) {
+	public function __construct( $id ) {
 
-		$this->id           = (int) $id;
-		$this->default_size = $default_size;
+		$this->id = (int) $id;
 
 		$meta = get_post_meta( $this->id, self::ID, TRUE );
 		if ( $meta === '' ) {
@@ -49,20 +45,7 @@ class WebPAttachment {
 		$this->meta = array_merge( $this->meta, $meta );
 	}
 
-	public function src( string $size = '' ): string {
-
-		if ( $size === '' ) {
-			$size = $this->default_size;
-		}
-
-		return AttachmentPathResolver::url( $this->meta, $size );
-	}
-
-	public function srcset( string $size = '' ): string {
-
-		if ( $size === '' ) {
-			$size = $this->default_size;
-		}
+	public function srcset( string $size ): string {
 
 		$src = $this->src( $size );
 		if ( $src === '' ) {
@@ -80,11 +63,12 @@ class WebPAttachment {
 		return $srcset;
 	}
 
-	public function size( string $size = '' ): array {
+	public function src( string $size ): string {
 
-		if ( $size === '' ) {
-			$size = $this->default_size;
-		}
+		return AttachmentPathResolver::url( $this->meta, $size );
+	}
+
+	public function size( string $size ): array {
 
 		if ( $size === 'full' ) {
 			return [
@@ -100,25 +84,16 @@ class WebPAttachment {
 		return [];
 	}
 
-	public function sizes(): array {
-
-		return $this->meta[ 'sizes' ];
-	}
-
-	public function size_exists( string $size = '' ): bool {
-
-		if ( $size === '' ) {
-			$size = $this->default_size;
-		}
+	public function size_exists( string $size ): bool {
 
 		return ( $size === 'full' )
 			? $this->meta[ 'file' ] !== ''
-			: isset( $this->meta[ 'sizes' ][ $size ] );
+			: isset( $this->meta[ 'sizes' ][ $size ][ 'file' ] );
 	}
 
-	public function meta(): array {
+	public function sizes(): array {
 
-		return $this->meta;
+		return $this->meta[ 'sizes' ];
 	}
 
 	/**
@@ -137,5 +112,10 @@ class WebPAttachment {
 		}
 
 		return filesize( $webp_file ) - filesize( $original_file );
+	}
+
+	public function meta(): array {
+
+		return $this->meta;
 	}
 }
