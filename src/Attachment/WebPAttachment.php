@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 );
+<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
 
 namespace WebPify\Attachment;
 
@@ -7,7 +7,7 @@ namespace WebPify\Attachment;
  */
 class WebPAttachment {
 
-	const ID = '_webpify_attachment_meta';
+	const ID = '_WebPify_attachment_meta';
 
 	const DATA_SRC = 'data-webp-src';
 	const DATA_SRCSET = 'data-webp-srcset';

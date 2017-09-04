@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 );
+<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
 
 namespace WebPify\Assets;
 
@@ -7,7 +7,7 @@ namespace WebPify\Assets;
  */
 final class LazyLoadScriptData {
 
-	const FILTER_OPTIONS = 'webpify.script.options';
+	const FILTER_OPTIONS = 'WebPify.script.options';
 
 	/**
 	 * @link https://github.com/verlok/lazyload#options

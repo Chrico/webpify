@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 );
+<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
 
 namespace WebPify\Attachment\Column;
 
@@ -9,7 +9,7 @@ use WebPify\Attachment\WebPAttachment;
  */
 final class MediaEditColumn {
 
-	const ID = 'webpify_media_column';
+	const ID = 'WebPify__media-column';
 
 	public function title( array $columns ): array {
 
