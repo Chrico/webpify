@@ -1,5 +1,5 @@
 /*! global WebPify */
-import LazyLoad from '../../../node_modules/vanilla-lazyload/dist/lazyload.es2015';
+import LazyLoad from 'vanilla-lazyload';
 
 // detect if a image has the "data-web-src"- or "data-web-srcset"-attributes
 // and replace the default "data-src" and/or "data-srcset"-attributes with it.

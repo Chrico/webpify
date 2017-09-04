@@ -19,7 +19,7 @@
     "gulp-browserify": "^0.5.1"
   },
   "dependencies": {
-    "vanilla-lazyload": "^8.0.1"
+    "vanilla-lazyload": "^10.0"
   },
   "browserify": {
     "transform": [
