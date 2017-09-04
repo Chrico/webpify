@@ -13,9 +13,17 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 	public function register( Container $plugin ) {
 
-		$plugin[ Script::class ] = function ( Container $plugin ): Script {
+		$plugin[ LazyLoadScriptData::class ] = function (): LazyLoadScriptData {
 
-			return new Script( $plugin[ 'config.plugin_file' ] );
+			return new LazyLoadScriptData();
+		};
+
+		$plugin[ LazyLoadScript::class ] = function ( Container $plugin ): LazyLoadScript {
+
+			return new LazyLoadScript(
+				$plugin[ 'config.plugin_file' ],
+				$plugin[ LazyLoadScriptData::class ]
+			);
 		};
 
 	}
@@ -28,12 +36,12 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 		add_filter(
 			'wp_enqueue_scripts',
-			[ $plugin[ Script::class ], 'enqueue' ]
+			[ $plugin[ LazyLoadScript::class ], 'enqueue' ]
 		);
 
 		add_filter(
 			'script_loader_tag',
-			[ $plugin[ Script::class ], 'print_inline' ],
+			[ $plugin[ LazyLoadScript::class ], 'print_inline' ],
 			10,
 			2
 		);

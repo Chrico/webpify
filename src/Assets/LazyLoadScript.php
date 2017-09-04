@@ -5,9 +5,9 @@ namespace WebPify\Assets;
 /**
  * @package WebPify\Assets
  */
-final class Script {
+final class LazyLoadScript {
 
-	const HANDLE = 'webpify';
+	const HANDLE = 'WebPify';
 
 	/**
 	 * @var string
@@ -15,11 +15,18 @@ final class Script {
 	private $plugin_file_path;
 
 	/**
-	 * @param string $plugin_file_path
+	 * @var LazyLoadScriptData
 	 */
-	public function __construct( string $plugin_file_path ) {
+	private $data;
+
+	/**
+	 * @param string             $plugin_file_path
+	 * @param LazyLoadScriptData $data
+	 */
+	public function __construct( string $plugin_file_path, LazyLoadScriptData $data ) {
 
 		$this->plugin_file_path = $plugin_file_path;
+		$this->data             = $data;
 	}
 
 	public function enqueue() {
@@ -31,8 +38,21 @@ final class Script {
 			NULL,
 			TRUE
 		);
+
+		wp_localize_script(
+			self::HANDLE,
+			self::HANDLE,
+			[ 'options' => $this->data->get_options() ]
+		);
+
 	}
 
+	/**
+	 * @param string $tag
+	 * @param string $handle
+	 *
+	 * @return string
+	 */
 	public function print_inline( $tag, $handle ): string {
 
 		if ( $handle === self::HANDLE ) {

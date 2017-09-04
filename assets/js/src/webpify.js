@@ -1,3 +1,4 @@
+/*! global WebPify */
 import LazyLoad from '../../../node_modules/vanilla-lazyload/dist/lazyload.es2015';
 
 // detect if a image has the "data-web-src"- or "data-web-srcset"-attributes
@@ -28,10 +29,7 @@ const maybeReplaceDefaultImages = () => {
 
 const initializeLazyLoad = () => {
 
-	new LazyLoad( {
-		'data_srcset': 'srcset',
-		'data_src'   : 'src'
-	} );
+	new LazyLoad( WebPify.options || {} );
 };
 
 const webp = new Image();
