@@ -21,14 +21,11 @@ final class LazyLoadScriptData {
 			[
 				'elements_selector' => "img",
 				'threshold'         => 300,
-				'throttle'          => 150,
 				'data_src'          => "src",
 				'data_srcset'       => "srcset",
 				'class_loading'     => "WebPify--loading",
 				'class_loaded'      => "WebPify--loaded",
-				'class_error'       => "WebPify--error",
-				"class_initial"     => "WebPify--initial",
-				"skip_invisible"    => TRUE
+				'class_error'       => "WebPify--error"
 			]
 		);
 	}
