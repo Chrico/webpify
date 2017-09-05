@@ -1,5 +1,5 @@
 {
-  "name": "chrico/webpify",
+  "name": "ChriCo/WebPify",
   "description": "Generating automatically WebP-images and provide them via feature detection and lazy loading.",
   "type": "wordpress-plugin",
   "license": "MIT",

@@ -1,13 +1,18 @@
 {
-  "name": "webpify",
+  "name": "@ChriCo/WebPify",
+  "description": "Generating automatically WebP-images and provide them via feature detection and lazy loading.",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "author": {
     "name": "ChriCo",
     "url": "https://www.chrico.info",
     "email": "chris@chrico.info"
   },
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrico/WebPify.git"
+  },
   "devDependencies": {
     "gulp": "^3.8.8",
     "babel-preset-es2015": "^6.24.1",
