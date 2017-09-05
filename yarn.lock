@@ -2658,9 +2658,9 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
 
-vanilla-lazyload@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-8.0.1.tgz#89df2fa695f47d681753c941f9caa5d276ab7bbc"
+vanilla-lazyload@^8.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-8.1.0.tgz#3a3de06e8e8373e95755396f5a7b222b6169851f"
 
 vinyl-fs@^0.3.0:
   version "0.3.14"
