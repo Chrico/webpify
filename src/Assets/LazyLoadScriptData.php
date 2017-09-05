@@ -19,7 +19,7 @@ final class LazyLoadScriptData {
 		return apply_filters(
 			self::FILTER_OPTIONS,
 			[
-				'elements_selector' => "img",
+				'elements_selector' => "img[data-src]",
 				'threshold'         => 300,
 				'data_src'          => "src",
 				'data_srcset'       => "srcset",
