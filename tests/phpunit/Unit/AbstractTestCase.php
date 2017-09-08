@@ -1,10 +1,9 @@
-<?php
+<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
 
 namespace WebPify\Tests\Unit;
 
 use Brain\Monkey;
 use PHPUnit\Framework\TestCase;
-use WebPify\Renderer\ImageRenderInterface;
 
 /**
  * @package WebPify\Tests\Unit
