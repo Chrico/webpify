@@ -13,7 +13,7 @@ matrix:
     - php: nightly
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || true
   - composer self-update
 
 install:
