@@ -3,6 +3,7 @@
 namespace WebPify\Renderer;
 
 use WebPify\Attachment\WebPAttachment;
+use WebPify\WebPify;
 
 /**
  * @package WebPify\Renderer
@@ -21,6 +22,16 @@ final class ImageRenderer implements ImageRenderInterface {
 	];
 
 	public function render( string $img, int $attachment_id, string $size ): string {
+
+		if ( substr( $img, 0, 4 ) !== '<img' ) {
+			do_action(
+				WebPify::ACTION_ERROR,
+				'The given input is not an <code>img</code>-tag.',
+				func_get_args()
+			);
+
+			return $img;
+		}
 
 		$replacments = $this->default_replacements;
 

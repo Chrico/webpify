@@ -3,6 +3,7 @@
 namespace WebPify\Attachment;
 
 use WebPify\Transformer\ImageTransformerInterface;
+use WebPify\WebPify;
 
 /**
  * @package WebPify\Attachment
@@ -64,7 +65,7 @@ class MetaDataImageGenerator {
 			// Note: WP returns "false" when the existing PostMeta is equal to the new one.
 			// So no panic when update_post_meta returns false.
 			do_action(
-				'WebPify.error',
+				WebPify::ACTION_ERROR,
 				'An error occured while updating the WebP-metadata.',
 				[ 'metadata' => $metadata, 'webp_metadata' => $webp_metadata ]
 			);

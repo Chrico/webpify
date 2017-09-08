@@ -4,11 +4,15 @@ namespace WebPify;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @package WebPify
  */
-final class WebPify extends Container {
+final class WebPify extends Container implements ContainerInterface {
+
+	const ACTION_BOOT = 'WebPify.boot';
+	const ACTION_ERROR = 'WebPify.error';
 
 	/**
 	 * @var bool
@@ -41,6 +45,22 @@ final class WebPify extends Container {
 	}
 
 	/**
+	 * @return ServiceProviderInterface[]
+	 */
+	public function providers(): array {
+
+		return $this->providers;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function booted(): bool {
+
+		return $this->booted;
+	}
+
+	/**
 	 * Boots all service providers.
 	 *
 	 * This method is automatically called by handle(), but you can use it
@@ -62,7 +82,7 @@ final class WebPify extends Container {
 		 *
 		 * @param GoogleTagManager
 		 */
-		\do_action( 'WebPify.boot', $this );
+		\do_action( self::ACTION_BOOT, $this );
 
 		foreach ( $this->providers as $provider ) {
 			if ( $provider instanceof Core\BootableProviderInterface ) {
@@ -73,4 +93,19 @@ final class WebPify extends Container {
 		return TRUE;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get( $id ) {
+
+		return $this[ $id ];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function has( $id ) {
+
+		return isset( $this[ $id ] );
+	}
 }

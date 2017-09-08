@@ -16,7 +16,7 @@ final class LazyLoadScriptData {
 	 */
 	public function get_options(): array {
 
-		return apply_filters(
+		return (array) apply_filters(
 			self::FILTER_OPTIONS,
 			[
 				'elements_selector' => "img[data-src]",

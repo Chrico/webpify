@@ -3,6 +3,7 @@
 namespace WebPify\Transformer\GD;
 
 use WebPify\Transformer\ImageTransformerInterface;
+use WebPify\WebPify;
 
 /**
  * @package WebPify\Transformer\GD
@@ -27,7 +28,7 @@ final class GDImageTransformer implements ImageTransformerInterface {
 		if ( ! isset( $this->image_functions[ $ext ] ) ) {
 
 			do_action(
-				'WebPify.error',
+				WebPify::ACTION_ERROR,
 				sprintf( 'Could not find "%s" in available extension.', $ext ),
 				$error_context
 			);
@@ -41,7 +42,7 @@ final class GDImageTransformer implements ImageTransformerInterface {
 		if ( ! function_exists( $func ) ) {
 
 			do_action(
-				'WebPify.error',
+				WebPify::ACTION_ERROR,
 				sprintf( 'The extension "%s" is not available.', $ext ),
 				$error_context
 			);
@@ -56,7 +57,7 @@ final class GDImageTransformer implements ImageTransformerInterface {
 		if ( ! $success ) {
 
 			do_action(
-				'WebPify.error',
+				WebPify::ACTION_ERROR,
 				'Image creation failed.',
 				$error_context
 			);

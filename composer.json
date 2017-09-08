@@ -16,9 +16,19 @@
     "php": ">=7",
     "pimple/pimple": "^3.0"
   },
+  "require-dev": {
+    "php": ">=7",
+    "brain/monkey": "~1.0",
+    "phpunit/phpunit": "~6.0"
+  },
   "autoload": {
     "psr-4": {
       "WebPify\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WebPify\\Tests\\": "tests/phpunit/"
     }
   },
   "config": {

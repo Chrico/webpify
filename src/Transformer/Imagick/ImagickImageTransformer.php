@@ -3,6 +3,7 @@
 namespace WebPify\Transformer\Imagick;
 
 use WebPify\Transformer\ImageTransformerInterface;
+use WebPify\WebPify;
 use WP_CLI\Iterators\Exception;
 
 /**
@@ -25,7 +26,7 @@ final class ImagickImageTransformer implements ImageTransformerInterface {
 			$ext = strtolower( pathinfo( $source_file, PATHINFO_EXTENSION ) );
 			if ( ! in_array( $ext, [ 'jpg', 'jpeg', 'png' ] ) ) {
 				do_action(
-					'WebPify.error',
+					WebPify::ACTION_ERROR,
 					sprintf( 'The extension "%s" is not supported', $ext ),
 					$error_context
 				);
@@ -52,7 +53,7 @@ final class ImagickImageTransformer implements ImageTransformerInterface {
 			}
 
 			do_action(
-				'WebPify.error',
+				WebPify::ACTION_ERROR,
 				$e->getMessage(),
 				$error_context
 			);

@@ -2,6 +2,7 @@
 
 namespace WebPify\Parser;
 
+use WebPify\Renderer\ImageRenderer;
 use WebPify\Renderer\ImageRenderInterface;
 
 /**
@@ -29,9 +30,9 @@ final class RegexImageParser implements ParserInterface {
 	 *
 	 * @param ImageRenderInterface $renderer
 	 */
-	public function __construct( ImageRenderInterface $renderer ) {
+	public function __construct( ImageRenderInterface $renderer = NULL ) {
 
-		$this->renderer = $renderer;
+		$this->renderer = $renderer ?? new ImageRenderer();
 
 	}
 
@@ -43,6 +44,7 @@ final class RegexImageParser implements ParserInterface {
 		}
 
 		// Don't lazy-load if the content has already been run through previously
+		// TODO: this check is might be a little bit...inflexible, since data-src can be used everywhere.
 		if ( FALSE !== strpos( $content, 'data-src' ) ) {
 			return $content;
 		}
