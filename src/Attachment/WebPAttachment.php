@@ -13,11 +13,6 @@ class WebPAttachment {
 	const DATA_SRCSET = 'data-webp-srcset';
 
 	/**
-	 * Default base64-image as placeholder for not loaded images.
-	 */
-	const BASE64_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-
-	/**
 	 * Default meta array which holds the same image formats as "_wp_attachment_metadata".
 	 *
 	 * @var array

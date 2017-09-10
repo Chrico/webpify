@@ -3,7 +3,6 @@
 namespace WebPify\Tests\Unit\Renderer;
 
 use Brain\Monkey\WP\Actions;
-use WebPify\Attachment\WebPAttachment;
 use WebPify\Renderer\ImageRenderer;
 use WebPify\Renderer\ImageRenderInterface;
 use WebPify\Tests\Unit\AbstractTestCase;
@@ -25,17 +24,33 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render() {
 
-		$input    = '<img src="foo.jpg" srcset="bar.jpg" />';
-		$expected = sprintf(
-			'<img data-src="foo.jpg" data-srcset="bar.jpg" src="%s" /><noscript>%s</noscript>',
-			WebPAttachment::BASE64_IMAGE,
-			$input
-		);
+		Actions::expectFired( WebPify::ACTION_ERROR )
+			->never();
 
-		$this->assertSame(
-			$expected,
-			( new ImageRenderer() )->render( $input, 0, '' )
-		);
+		$placeholder = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
+		$input  = '<img src="foo.jpg" srcset="bar.jpg" />';
+		$output = ( new ImageRenderer( $placeholder ) )->render( $input, 0, '' );
+
+		$this->assertContains( 'data-src="foo.jpg"', $output );
+		$this->assertContains( 'data-srcset="bar.jpg"', $output );
+		$this->assertContains( 'src="' . $placeholder . '"', $output );
+		$this->assertcontains( '<noscript>' . $input . '</noscript>', $output );
+	}
+
+	/**
+	 * Test if no placeholder (empty string) is given, that no "src"-attribute is printed out.
+	 */
+	public function test_render__empty_placeholder() {
+
+		Actions::expectFired( WebPify::ACTION_ERROR )
+			->never();
+
+		$input  = '<img src="foo.jpg" />';
+		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
+
+		$this->assertNotContains( 'src=""', $output );
+		$this->assertContains( '<noscript>' . $input . '</noscript>', $output );
 	}
 
 	/**
@@ -43,18 +58,14 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render__only_src() {
 
+		Actions::expectFired( WebPify::ACTION_ERROR )
+			->never();
 
-		$input    = '<img src="foo.jpg" />';
-		$expected = sprintf(
-			'<img data-src="foo.jpg" src="%s" /><noscript>%s</noscript>',
-			WebPAttachment::BASE64_IMAGE,
-			$input
-		);
+		$input  = '<img src="foo.jpg" />';
+		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
 
-		$this->assertSame(
-			$expected,
-			( new ImageRenderer() )->render( $input, 0, '' )
-		);
+		$this->assertContains( 'data-src="foo.jpg"', $output );
+		$this->assertcontains( '<noscript>' . $input . '</noscript>', $output );
 	}
 
 	/**
@@ -62,18 +73,14 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render__only_srcset() {
 
+		Actions::expectFired( WebPify::ACTION_ERROR )
+			->never();
 
-		$input    = '<img srcset="foo.jpg" />';
-		$expected = sprintf(
-			'<img data-srcset="foo.jpg" src="%s" /><noscript>%s</noscript>',
-			WebPAttachment::BASE64_IMAGE,
-			$input
-		);
+		$input  = '<img srcset="foo.jpg" />';
+		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
 
-		$this->assertSame(
-			$expected,
-			( new ImageRenderer() )->render( $input, 0, '' )
-		);
+		$this->assertContains( 'data-srcset="foo.jpg"', $output );
+		$this->assertcontains( '<noscript>' . $input . '</noscript>', $output );
 	}
 
 	/**
@@ -84,11 +91,9 @@ final class ImageRendererTest extends AbstractTestCase {
 		Actions::expectFired( WebPify::ACTION_ERROR )
 			->once();
 
-		$expected = '<div class="foo"></div>';
+		$input  = '<div class="foo"></div>';
+		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
 
-		$this->assertSame(
-			$expected,
-			( new ImageRenderer() )->render( $expected, 0, '' )
-		);
+		$this->assertSame( $input, $output );
 	}
 }

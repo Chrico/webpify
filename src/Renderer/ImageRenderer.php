@@ -11,15 +11,17 @@ use WebPify\WebPify;
 final class ImageRenderer implements ImageRenderInterface {
 
 	/**
-	 * Replacements "to" mapped to "from".
-	 *
-	 * @var array
+	 * @var string
 	 */
-	private $default_replacements = [
-		'data-src="'                                    => 'src="',
-		'data-srcset="'                                 => 'srcset="',
-		'src="' . WebPAttachment::BASE64_IMAGE . '" />' => '/>',
-	];
+	private $placeholder;
+
+	/**
+	 * @param string $placeholder
+	 */
+	public function __construct( string $placeholder = '' ) {
+
+		$this->placeholder = $placeholder;
+	}
 
 	public function render( string $img, int $attachment_id, string $size ): string {
 
@@ -33,7 +35,14 @@ final class ImageRenderer implements ImageRenderInterface {
 			return $img;
 		}
 
-		$replacments = $this->default_replacements;
+		$replacments = [
+			'data-src="'    => 'src="',
+			'data-srcset="' => 'srcset="',
+		];
+
+		if ( $this->placeholder !== '' ) {
+			$replacments[ 'src="' . $this->placeholder . '" />' ] = '/>';
+		}
 
 		if ( $attachment_id !== 0 ) {
 			$webp = new WebPAttachment( $attachment_id );

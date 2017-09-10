@@ -34,7 +34,12 @@ function initialize() {
 			require __DIR__ . '/vendor/autoload.php';
 		}
 
-		$plugin = new WebPify( [ 'config.plugin_file' => __FILE__ ] );
+		$plugin = new WebPify(
+			[
+				'config.plugin_file'     => __FILE__,
+				'config.placeholder_src' => 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+			]
+		);
 		$plugin->register( new Assets\Provider() );
 		$plugin->register( new Attachment\Provider() );
 		$plugin->register( new Renderer\Provider() );

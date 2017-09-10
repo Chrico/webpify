@@ -12,9 +12,9 @@ final class Provider implements ServiceProviderInterface {
 
 	public function register( Container $plugin ) {
 
-		$plugin[ ImageRenderer::class ] = function (): ImageRenderer {
+		$plugin[ ImageRenderer::class ] = function ( Container $plugin ): ImageRenderer {
 
-			return new ImageRenderer();
+			return new ImageRenderer( $plugin[ 'config.placeholder_src' ] );
 		};
 
 	}
