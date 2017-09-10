@@ -50,8 +50,18 @@ final class GDImageTransformer implements ImageTransformerInterface {
 			return FALSE;
 		}
 
-		$resource = $func( $source_file );
-		$success  = @imagewebp( $resource, $dest_file );
+		$resource = @$func( $source_file );
+		if ( ! $resource ) {
+			do_action(
+				WebPify::ACTION_ERROR,
+				sprintf( 'Creating resource failed.', $ext ),
+				$error_context
+			);
+
+			return FALSE;
+		}
+
+		$success = @imagewebp( $resource, $dest_file );
 		imagedestroy( $resource );
 
 		if ( ! $success ) {

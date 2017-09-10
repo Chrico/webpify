@@ -2,33 +2,20 @@
 
 namespace WebPify\Tests\Unit\Transformer\Imagick;
 
-use WebPify\Tests\Unit\AbstractTestCase;
+use WebPify\Tests\Unit\Transformer\AbstractImageTransformerTestCase;
 use WebPify\Transformer\ImageTransformerInterface;
 use WebPify\Transformer\Imagick\ImagickImageTransformer;
 
 /**
  * @package WebPify\Tests\Unit\Transformer\Imagick
  */
-final class ImagickImageTransformerTest extends AbstractTestCase {
+final class ImagickImageTransformerTest extends AbstractImageTransformerTestCase {
 
-	protected function setUp() {
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function get_testee(): ImageTransformerInterface {
 
-		parent::setUp();
-
-		if ( ! ( new ImagickImageTransformer() )->is_activated() ) {
-			$this->markTestSkipped( 'Required extensions are not installed' );
-		}
+		return new ImagickImageTransformer();
 	}
-
-	public function test_basic() {
-
-		$testee = new ImagickImageTransformer();
-		$this->assertInstanceOf( ImageTransformerInterface::class, $testee );
-	}
-
-	public function test_is_activated() {
-
-		$this->assertTrue( ( new ImagickImageTransformer() )->is_activated() );
-	}
-
 }
