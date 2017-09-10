@@ -13,7 +13,6 @@ matrix:
     - php: nightly
 
 before_install:
-  - sudo apt-get update
   - printf "\n" | pecl install imagick
   - phpenv config-rm xdebug.ini || true
   - composer self-update
