@@ -22,4 +22,4 @@ install:
   - composer install
 
 script:
-  - vendor/bin/phpunit --verbose
+  - vendor/bin/phpunit

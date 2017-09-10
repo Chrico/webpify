@@ -23,6 +23,16 @@ final class ImagickImageTransformer implements ImageTransformerInterface {
 				'dest_file'   => $dest_file
 			];
 
+			if ( ! file_exists( $source_file ) ) {
+				do_action(
+					WebPify::ACTION_ERROR,
+					sprintf( 'Source file does not exist.', $ext ),
+					$error_context
+				);
+
+				return FALSE;
+			}
+
 			$ext = strtolower( pathinfo( $source_file, PATHINFO_EXTENSION ) );
 			if ( ! in_array( $ext, [ 'jpg', 'jpeg', 'png' ] ) ) {
 				do_action(
@@ -45,7 +55,7 @@ final class ImagickImageTransformer implements ImageTransformerInterface {
 
 			return $im->writeImage( $dest_file );
 		}
-		catch ( Exception $e ) {
+		catch ( \Throwable $e ) {
 
 			$error_context[ 'exception' ] = $e;
 			if ( isset( $im ) ) {
