@@ -51,9 +51,11 @@ class AttachmentPathResolver {
 	 *
 	 * @return string full path/url to file
 	 */
-	private function resolve( string $size, string $type ): string {
+	public function resolve( string $size, string $type ): string {
 
-		$dir = trailingslashit( $this->uploads_dir[ $type ] );
+		if ( ! isset( $this->uploads_dir[ $type ] ) ) {
+			return '';
+		}
 
 		// the full is always required either for..
 		// ... returning the full
@@ -63,6 +65,7 @@ class AttachmentPathResolver {
 		}
 
 		$full = $this->meta[ 'file' ];
+		$dir  = trailingslashit( $this->uploads_dir[ $type ] );
 
 		if ( $size === 'full' ) {
 			return $dir . $full;

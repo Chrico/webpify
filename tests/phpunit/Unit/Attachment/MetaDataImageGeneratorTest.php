@@ -4,6 +4,7 @@ namespace WebPify\Tests\Unit\Attachment;
 
 use Brain\Monkey\Functions;
 use Brain\Monkey\WP\Actions;
+use Mockery;
 use WebPify\Attachment\MetaDataImageGenerator;
 use WebPify\Tests\Unit\AbstractTestCase;
 use WebPify\Transformer\ImageTransformerInterface;
@@ -38,10 +39,12 @@ final class MetaDataImageGeneratorTest extends AbstractTestCase {
 
 		Functions::expect( 'trailingslashit' )
 			->twice()
+			->with( Mockery::type( 'string' ) )
 			->andReturn( '' );
 
 		Functions::expect( 'update_post_meta' )
 			->once()
+			->with( Mockery::type( 'int' ), Mockery::type( 'string' ), Mockery::type( 'array' ) )
 			->andReturn( TRUE );
 
 		$metadata   = [
@@ -74,10 +77,12 @@ final class MetaDataImageGeneratorTest extends AbstractTestCase {
 
 		Functions::expect( 'trailingslashit' )
 			->twice()
+			->with( Mockery::type( 'string' ) )
 			->andReturn( '' );
 
 		Functions::expect( 'update_post_meta' )
 			->once()
+			->with( Mockery::type( 'int' ), Mockery::type( 'string' ), Mockery::type( 'array' ) )
 			->andReturn( FALSE );
 
 		$metadata   = [
