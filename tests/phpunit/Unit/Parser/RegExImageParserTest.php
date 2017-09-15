@@ -9,11 +9,9 @@ use WebPify\Renderer\ImageRenderInterface;
 use WebPify\Tests\Unit\AbstractTestCase;
 
 /**
- * Class RegExImageParserTest
- *
  * @package WebPify\Tests\Unit\Parser
  */
-final class RegExImageParserTest extends AbstractTestCase {
+final class RegexImageParserTest extends AbstractTestCase {
 
 	public function test_basic() {
 
