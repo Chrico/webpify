@@ -40,7 +40,7 @@ class AttachmentPathResolver {
 	 *
 	 * @return string
 	 */
-	public function dir( string $size ): string {
+	public function with_dir( string $size ): string {
 
 		return $this->resolve( $size, self::TYPE_DIR );
 	}
@@ -86,7 +86,7 @@ class AttachmentPathResolver {
 	 *
 	 * @return string
 	 */
-	public function url( string $size ): string {
+	public function with_url( string $size ): string {
 
 		return $this->resolve( $size, self::TYPE_URL );
 	}

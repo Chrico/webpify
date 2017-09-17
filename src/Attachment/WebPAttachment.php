@@ -66,7 +66,7 @@ class WebPAttachment {
 
 	public function src( string $size ): string {
 
-		return $this->attachment_path_resolver->url( $size );
+		return $this->attachment_path_resolver->with_url( $size );
 	}
 
 	public function size( string $size ): array {
@@ -105,9 +105,9 @@ class WebPAttachment {
 	 */
 	public function diff_filesize( array $original_meta, string $size ): int {
 
-		$webp_file     = $this->attachment_path_resolver->dir( $size );
+		$webp_file     = $this->attachment_path_resolver->with_dir( $size );
 		$original_file = AttachmentPathResolver::for_meta( $original_meta )
-			->dir( $size );
+			->with_dir( $size );
 
 		if ( $webp_file === '' || $original_file === '' ) {
 			return 0;
