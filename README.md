@@ -12,7 +12,7 @@ WebPIfy is a WordPress-Plugin which generates automatically WebP-images for your
 ## Installation
 
 ```
-$ composer require ChriCo/WebPify
+$ composer require chrico/webpify
 ```
 
 ## Submitting bugs and feature requests
