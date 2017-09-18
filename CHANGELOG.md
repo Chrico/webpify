@@ -1,4 +1,4 @@
 # Changelog
 
-## 0.0.1 (NOT RELEASED)
+## 0.0.1
 - First release
