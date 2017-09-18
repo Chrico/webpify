@@ -1,5 +1,5 @@
 {
-  "name": "@ChriCo/WebPify",
+  "name": "@chrico/webpify",
   "description": "Generating automatically WebP-images and provide them via feature detection and lazy loading.",
   "version": "0.1.0",
   "private": true,
