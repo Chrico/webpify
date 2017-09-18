@@ -66,7 +66,7 @@ final class LazyLoadScript {
 			$content = file_get_contents( $src );
 			if ( ! ! $content ) {
 				$tag = sprintf(
-					'<script>%s</script>',
+					"<script>%s</script>",
 					$content
 				);
 			}

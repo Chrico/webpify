@@ -50,6 +50,7 @@ final class GDImageTransformer implements ImageTransformerInterface {
 			return FALSE;
 		}
 
+		/** @noinspection PhpUsageOfSilenceOperatorInspection */
 		$resource = @$func( $source_file );
 		if ( ! $resource ) {
 			do_action(
@@ -61,6 +62,7 @@ final class GDImageTransformer implements ImageTransformerInterface {
 			return FALSE;
 		}
 
+		/** @noinspection PhpUsageOfSilenceOperatorInspection */
 		$success = @imagewebp( $resource, $dest_file );
 		imagedestroy( $resource );
 

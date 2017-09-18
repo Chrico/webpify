@@ -4,7 +4,6 @@ namespace WebPify\Transformer\Imagick;
 
 use WebPify\Transformer\ImageTransformerInterface;
 use WebPify\WebPify;
-use WP_CLI\Iterators\Exception;
 
 /**
  * @package WebPify\Transformer\Imagick
@@ -26,7 +25,7 @@ final class ImagickImageTransformer implements ImageTransformerInterface {
 			if ( ! file_exists( $source_file ) ) {
 				do_action(
 					WebPify::ACTION_ERROR,
-					sprintf( 'Source file does not exist.', $ext ),
+					'Source file does not exist.',
 					$error_context
 				);
 

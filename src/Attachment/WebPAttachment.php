@@ -25,6 +25,11 @@ class WebPAttachment {
 	];
 
 	/**
+	 * @var int
+	 */
+	private $id;
+
+	/**
 	 * @var AttachmentPathResolver
 	 */
 	private $attachment_path_resolver;
