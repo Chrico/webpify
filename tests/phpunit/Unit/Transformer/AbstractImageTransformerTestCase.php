@@ -2,7 +2,7 @@
 
 namespace WebPify\Tests\Unit\Transformer;
 
-use Brain\Monkey\WP\Actions;
+use Brain\Monkey\Actions;
 use WebPify\Tests\Unit\AbstractTestCase;
 use WebPify\Transformer\ImageTransformerInterface;
 use WebPify\WebPify;
@@ -40,7 +40,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 	 */
 	public function test_create__not_supported_file_format() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
 		$this->assertFalse(
@@ -54,7 +54,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 	 */
 	public function test_create__broken_source_file() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
 		$this->assertFalse(
@@ -68,7 +68,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 	 */
 	public function test_create__not_existing_file() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
 		$this->assertFalse(

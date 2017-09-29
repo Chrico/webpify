@@ -2,7 +2,7 @@
 
 namespace WebPify\Tests\Unit\Renderer;
 
-use Brain\Monkey\WP\Actions;
+use Brain\Monkey\Actions;
 use WebPify\Renderer\ImageRenderer;
 use WebPify\Renderer\ImageRenderInterface;
 use WebPify\Tests\Unit\AbstractTestCase;
@@ -24,7 +24,7 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->never();
 
 		$placeholder = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
@@ -43,7 +43,7 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render__empty_placeholder() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->never();
 
 		$input  = '<img src="foo.jpg" />';
@@ -58,7 +58,7 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render__only_src() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->never();
 
 		$input  = '<img src="foo.jpg" />';
@@ -73,7 +73,7 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render__only_srcset() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->never();
 
 		$input  = '<img srcset="foo.jpg" />';
@@ -88,7 +88,7 @@ final class ImageRendererTest extends AbstractTestCase {
 	 */
 	public function test_render__no_image() {
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
 		$input  = '<div class="foo"></div>';

@@ -14,7 +14,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 
 	public function test_basic() {
 
-		Functions::expect( 'wp_get_upload_dir' )
+		Functions\expect( 'wp_get_upload_dir' )
 			->once();
 
 		$this->assertInstanceOf( AttachmentPathResolver::class, new AttachmentPathResolver( [] ) );
@@ -22,7 +22,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 
 	public function test_for_meta() {
 
-		Functions::expect( 'wp_get_upload_dir' )
+		Functions\expect( 'wp_get_upload_dir' )
 			->once();
 
 		$this->assertInstanceOf( AttachmentPathResolver::class, AttachmentPathResolver::for_meta( [] ) );
@@ -33,7 +33,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 	 */
 	public function test_resolve__type_not_exists() {
 
-		Functions::expect( 'wp_get_upload_dir' )
+		Functions\expect( 'wp_get_upload_dir' )
 			->once();
 
 		$this->assertSame(
@@ -48,7 +48,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 	public function test_resolve__no_file() {
 
 		$type = 'foo';
-		Functions::expect( 'wp_get_upload_dir' )
+		Functions\expect( 'wp_get_upload_dir' )
 			->once()
 			->andReturn( [ $type => 'bar' ] );
 
@@ -65,11 +65,11 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 
 		$meta = [ 'file' => 'foo.jpg' ];
 
-		Functions::expect( 'wp_get_upload_dir' )
+		Functions\expect( 'wp_get_upload_dir' )
 			->once()
 			->andReturn( [ AttachmentPathResolver::TYPE_DIR => 'bar/' ] );
 
-		Functions::when( 'trailingslashit' )
+		Functions\when( 'trailingslashit' )
 			->returnArg();
 
 		$this->assertSame(
@@ -89,11 +89,11 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 
 		$meta = [ 'file' => $expected_file ];
 
-		Functions::expect( 'wp_get_upload_dir' )
+		Functions\expect( 'wp_get_upload_dir' )
 			->once()
 			->andReturn( [ AttachmentPathResolver::TYPE_DIR => $expected_dir ] );
 
-		Functions::when( 'trailingslashit' )
+		Functions\when( 'trailingslashit' )
 			->returnArg();
 
 		$this->assertSame(
@@ -122,14 +122,14 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 			]
 		];
 
-		Functions::expect( 'wp_get_upload_dir' )
+		Functions\expect( 'wp_get_upload_dir' )
 			->once()
 			->andReturn( [ AttachmentPathResolver::TYPE_DIR => $expected_dir ] );
 
-		Functions::when( 'trailingslashit' )
+		Functions\when( 'trailingslashit' )
 			->returnArg();
 
-		Functions::expect( '_wp_get_attachment_relative_path' )
+		Functions\expect( '_wp_get_attachment_relative_path' )
 			->once()
 			->with( Mockery::type( 'string' ) )
 			->andReturn( $sub_dir );

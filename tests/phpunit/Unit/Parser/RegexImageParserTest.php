@@ -24,11 +24,11 @@ final class RegexImageParserTest extends AbstractTestCase {
 	 */
 	public function test_parse__is_feed() {
 
-		Functions::expect( 'is_feed' )
+		Functions\expect( 'is_feed' )
 			->once()
 			->andReturn( TRUE );
 
-		Functions::expect( 'is_preview' )
+		Functions\expect( 'is_preview' )
 			->never();
 
 		$expected = '<img src="foo.jpg" />';
@@ -44,11 +44,11 @@ final class RegexImageParserTest extends AbstractTestCase {
 	 */
 	public function test_parse__is_preview() {
 
-		Functions::expect( 'is_feed' )
+		Functions\expect( 'is_feed' )
 			->once()
 			->andReturn( FALSE );
 
-		Functions::expect( 'is_preview' )
+		Functions\expect( 'is_preview' )
 			->once()
 			->andReturn( TRUE );
 
@@ -64,11 +64,11 @@ final class RegexImageParserTest extends AbstractTestCase {
 	 */
 	public function test_parse__contains_data_attribute() {
 
-		Functions::expect( 'is_feed' )
+		Functions\expect( 'is_feed' )
 			->once()
 			->andReturn( FALSE );
 
-		Functions::expect( 'is_preview' )
+		Functions\expect( 'is_preview' )
 			->once()
 			->andReturn( FALSE );
 
@@ -87,11 +87,11 @@ final class RegexImageParserTest extends AbstractTestCase {
 	 */
 	public function test_parse( $input, $expected ) {
 
-		Functions::expect( 'is_feed' )
+		Functions\expect( 'is_feed' )
 			->once()
 			->andReturn( FALSE );
 
-		Functions::expect( 'is_preview' )
+		Functions\expect( 'is_preview' )
 			->once()
 			->andReturn( FALSE );
 

@@ -2,7 +2,7 @@
 
 namespace WebPify\Tests\Unit\Assets;
 
-use Brain\Monkey\WP\Filters;
+use Brain\Monkey\Filters;
 use WebPify\Assets\LazyLoadScriptData;
 use WebPify\Tests\Unit\AbstractTestCase;
 
@@ -23,7 +23,7 @@ final class LazyLoadScriptDataTest extends AbstractTestCase {
 	public function test_get_options__overwrite() {
 
 		$expected = [ 'foo' => 'bar' ];
-		Filters::expectApplied( LazyLoadScriptData::FILTER_OPTIONS )
+		Filters\expectApplied( LazyLoadScriptData::FILTER_OPTIONS )
 			->once()
 			->andReturn( $expected );
 

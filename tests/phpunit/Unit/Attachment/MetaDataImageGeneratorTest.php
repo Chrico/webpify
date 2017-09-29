@@ -3,7 +3,7 @@
 namespace WebPify\Tests\Unit\Attachment;
 
 use Brain\Monkey\Functions;
-use Brain\Monkey\WP\Actions;
+use Brain\Monkey\Actions;
 use Mockery;
 use WebPify\Attachment\MetaDataImageGenerator;
 use WebPify\Tests\Unit\AbstractTestCase;
@@ -34,15 +34,15 @@ final class MetaDataImageGeneratorTest extends AbstractTestCase {
 		$stub->method( 'create' )
 			->willReturn( 'test.jpg' );
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->never();
 
-		Functions::expect( 'trailingslashit' )
+		Functions\expect( 'trailingslashit' )
 			->twice()
 			->with( Mockery::type( 'string' ) )
 			->andReturn( '' );
 
-		Functions::expect( 'update_post_meta' )
+		Functions\expect( 'update_post_meta' )
 			->once()
 			->with( Mockery::type( 'int' ), Mockery::type( 'string' ), Mockery::type( 'array' ) )
 			->andReturn( TRUE );
@@ -72,15 +72,15 @@ final class MetaDataImageGeneratorTest extends AbstractTestCase {
 		$stub->method( 'create' )
 			->willReturn( 'test.jpg' );
 
-		Actions::expectFired( WebPify::ACTION_ERROR )
+		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
-		Functions::expect( 'trailingslashit' )
+		Functions\expect( 'trailingslashit' )
 			->twice()
 			->with( Mockery::type( 'string' ) )
 			->andReturn( '' );
 
-		Functions::expect( 'update_post_meta' )
+		Functions\expect( 'update_post_meta' )
 			->once()
 			->with( Mockery::type( 'int' ), Mockery::type( 'string' ), Mockery::type( 'array' ) )
 			->andReturn( FALSE );

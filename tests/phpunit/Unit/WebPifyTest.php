@@ -2,7 +2,7 @@
 
 namespace WebPify\Tests\Unit;
 
-use Brain\Monkey\WP\Actions;
+use Brain\Monkey\Actions;
 use Mockery;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -50,7 +50,7 @@ final class WebPifyTest extends AbstractTestCase {
 
 	public function test_boot() {
 
-		Actions::expectFired( WebPify::ACTION_BOOT )
+		Actions\expectDone( WebPify::ACTION_BOOT )
 			->once()
 			->with( Mockery::type( WebPify::class ) );
 
