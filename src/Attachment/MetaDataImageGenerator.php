@@ -43,6 +43,10 @@ class MetaDataImageGenerator {
 		$dir           = trailingslashit( $this->upload_dir[ 'basedir' ] );
 		$webp_metadata = $this->create_metadata( $metadata, $dir );
 
+		if ( ! isset( $webp_metadata[ 'file' ] ) ) {
+			return $metadata;
+		}
+
 		// append the subdir from full image,
 		// because the "sizes" are stored only with filename.
 		$dir .= trailingslashit( dirname( $metadata[ 'file' ] ) );

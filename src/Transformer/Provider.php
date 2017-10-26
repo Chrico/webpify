@@ -31,7 +31,7 @@ final class Provider implements ServiceProviderInterface {
 
 		$plugin[ ImageTransformerInterface::class ] = function ( Container $plugin ): ImageTransformerInterface {
 
-			$classes = [ ImagickImageTransformer::class, GDImageTransformer::class ];
+			$classes = [ GDImageTransformer::class, ImagickImageTransformer::class ];
 			foreach ( $classes as $class ) {
 				if ( $plugin[ $class ]->is_activated() ) {
 					return $plugin[ $class ];
