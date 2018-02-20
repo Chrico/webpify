@@ -1,19 +1,22 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace WebPify\Transformer;
 
 /**
  * @package WebPify\Transformer
  */
-class NullTransformer implements ImageTransformerInterface {
+class NullTransformer implements ImageTransformerInterface
+{
 
-	public function create( string $source_file, string $dest_file ): bool {
+    public function create(string $source_file, string $dest_file): bool
+    {
 
-		return FALSE;
-	}
+        return false;
+    }
 
-	public function is_activated(): bool {
+    public function isActivated(): bool
+    {
 
-		return TRUE;
-	}
+        return true;
+    }
 }

@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace WebPify\Attachment;
 
@@ -11,46 +11,67 @@ use WebPify\Transformer\ImageTransformerInterface;
 /**
  * @package WebPify\Attachment
  */
-final class Provider implements ServiceProviderInterface, BootableProviderInterface {
+final class Provider implements ServiceProviderInterface, BootableProviderInterface
+{
 
-	public function register( Container $plugin ) {
+    public function register(Container $plugin)
+    {
 
-		$plugin[ MetaDataImageGenerator::class ] = function ( Container $plugin ): MetaDataImageGenerator {
+        $plugin->offsetSet(
+            MetaDataImageGenerator::class,
+            function (Container $plugin): MetaDataImageGenerator {
 
-			return new MetaDataImageGenerator(
-				$plugin[ ImageTransformerInterface::class ],
-				wp_get_upload_dir()
-			);
-		};
+                return new MetaDataImageGenerator(
+                    $plugin[ ImageTransformerInterface::class ],
+                    wp_get_upload_dir()
+                );
+            }
+        );
 
-		$plugin[ MediaEditColumn::class ] = function (): MediaEditColumn {
+        $plugin->offsetSet(
+            MediaEditColumn::class,
+            function (): MediaEditColumn {
 
-			return new MediaEditColumn();
-		};
-	}
+                return new MediaEditColumn();
+            }
+        );
 
-	public function boot( Container $plugin ) {
+        $plugin->offsetSet(
+            AttachmentDeletor::class,
+            function (): AttachmentDeletor {
 
-		add_filter(
-			'wp_generate_attachment_metadata',
-			[ $plugin[ MetaDataImageGenerator::class ], 'generate' ],
-			10,
-			2
-		);
+                return new AttachmentDeletor();
+            }
+        );
+    }
 
-		if ( is_admin() ) {
+    public function boot(Container $plugin)
+    {
 
-			add_filter(
-				'manage_media_columns',
-				[ $plugin[ MediaEditColumn::class ], 'title' ]
-			);
+        add_filter(
+            'wp_generate_attachment_metadata',
+            [$plugin[ MetaDataImageGenerator::class ], 'generate'],
+            10,
+            2
+        );
 
-			add_filter(
-				'manage_media_custom_column',
-				[ $plugin[ MediaEditColumn::class ], 'content' ], 10, 2
-			);
+        if (is_admin()) {
+            add_filter(
+                'manage_media_columns',
+                [$plugin[ MediaEditColumn::class ], 'title']
+            );
 
-		}
+            add_filter(
+                'manage_media_custom_column',
+                [$plugin[ MediaEditColumn::class ], 'content'],
+                10,
+                2
+            );
 
-	}
+            add_action(
+                'delete_attachment',
+                [$plugin[ AttachmentDeletor::class ], 'delete']
+            );
+        }
+    }
 }

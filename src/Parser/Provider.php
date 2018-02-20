@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace WebPify\Parser;
 
@@ -10,43 +10,48 @@ use WebPify\Renderer\ImageRenderer;
 /**
  * @package WebPify\Parser
  */
-final class Provider implements ServiceProviderInterface, BootableProviderInterface {
+final class Provider implements ServiceProviderInterface, BootableProviderInterface
+{
 
-	public function register( Container $plugin ) {
+    public function register(Container $plugin)
+    {
 
-		$plugin[ RegexImageParser::class ] = function ( Container $plugin ): RegexImageParser {
+        $plugin->offsetSet(
+            RegexImageParser::class,
+            function (Container $plugin): RegexImageParser {
 
-			return new RegexImageParser( $plugin[ ImageRenderer::class ] );
-		};
+                return new RegexImageParser($plugin[ ImageRenderer::class ]);
+            }
+        );
+    }
 
-	}
+    public function boot(Container $plugin)
+    {
 
-	public function boot( Container $plugin ) {
+        if (is_admin()) {
+            return;
+        }
 
-		if ( is_admin() ) {
-			return;
-		}
+        $filters = [
+            'post_thumbnail_html',
+            'the_content',
+        ];
 
-		$filters = [
-			'post_thumbnail_html',
-			'the_content'
-		];
+        foreach ($filters as $filter) {
+            add_filter($filter, [$plugin[ RegexImageParser::class ], 'parse'], PHP_INT_MAX);
+        }
 
-		foreach ( $filters as $filter ) {
-			add_filter( $filter, [ $plugin[ RegexImageParser::class ], 'parse' ], PHP_INT_MAX );
-		}
+        add_filter(
+            'wp_get_attachment_image_attributes',
+            // we're adding the attachment->ID to the image attributes to parse them lateron.
+            function (array $attr, \WP_Post $attachment): array {
 
-		add_filter(
-			'wp_get_attachment_image_attributes',
-			// we're adding the attachment->ID to the image attributes to parse them lateron.
-			function ( $attr, \WP_Post $attachment ): array {
+                $attr[ 'class' ] .= ' wp-image-' . $attachment->ID;
 
-				$attr[ 'class' ] .= ' wp-image-' . $attachment->ID;
-
-				return $attr;
-			},
-			10,
-			2
-		);
-	}
+                return $attr;
+            },
+            10,
+            2
+        );
+    }
 }

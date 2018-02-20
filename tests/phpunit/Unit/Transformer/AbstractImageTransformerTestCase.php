@@ -22,7 +22,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 		parent::setUp();
 
 		if ( ! $this->get_testee()
-			->is_activated() ) {
+			->isActivated() ) {
 			$this->markTestSkipped( 'Required extensions are not installed' );
 		}
 	}
@@ -32,7 +32,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 	 */
 	public function test_basic() {
 
-		$this->assertInstanceOf( ImageTransformerInterface::class, $this->get_testee() );
+        static::assertInstanceOf( ImageTransformerInterface::class, $this->get_testee() );
 	}
 
 	/**
@@ -43,7 +43,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
-		$this->assertFalse(
+        static::assertFalse(
 			$this->get_testee()
 				->create( __DIR__ . '../../fixtures/no-image.txt', '' )
 		);
@@ -57,7 +57,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
-		$this->assertFalse(
+        static::assertFalse(
 			$this->get_testee()
 				->create( '../../fixtures/text-file-as-image.jpg', '' )
 		);
@@ -71,7 +71,7 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 		Actions\expectDone( WebPify::ACTION_ERROR )
 			->once();
 
-		$this->assertFalse(
+        static::assertFalse(
 			$this->get_testee()
 				->create( 'undefined.jpg', '' )
 		);
@@ -82,9 +82,9 @@ abstract class AbstractImageTransformerTestCase extends AbstractTestCase {
 	 */
 	public function test_is_activated() {
 
-		$this->assertTrue(
+        static::assertTrue(
 			$this->get_testee()
-				->is_activated()
+				->isActivated()
 		);
 	}
 }

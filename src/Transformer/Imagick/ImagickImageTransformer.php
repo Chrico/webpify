@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace WebPify\Transformer\Imagick;
 
@@ -11,69 +11,73 @@ use WebPify\WebPify;
  * @link    http://www.imagemagick.org/script/webp.php
  * @link    https://stackoverflow.com/questions/37711492/imagemagick-specific-webp-calls-in-php
  */
-final class ImagickImageTransformer implements ImageTransformerInterface {
+final class ImagickImageTransformer implements ImageTransformerInterface
+{
 
-	public function create( string $source_file, string $dest_file ): bool {
+    public function create(string $source_file, string $dest_file): bool
+    {
 
-		try {
+        try {
+            $error_context = [
+                'source_file' => $source_file,
+                'dest_file'   => $dest_file,
+            ];
 
-			$error_context = [
-				'source_file' => $source_file,
-				'dest_file'   => $dest_file
-			];
+            if (!file_exists($source_file)) {
+                do_action(
+                    WebPify::ACTION_ERROR,
+                    'Source file does not exist.',
+                    $error_context
+                );
 
-			if ( ! file_exists( $source_file ) ) {
-				do_action(
-					WebPify::ACTION_ERROR,
-					'Source file does not exist.',
-					$error_context
-				);
+                return false;
+            }
 
-				return FALSE;
-			}
+            $ext               = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
+            $allowedExtensions = [
+                'jpg',
+                'jpeg',
+                'png',
+            ];
+            if (!in_array($ext, $allowedExtensions, true)) {
+                do_action(
+                    WebPify::ACTION_ERROR,
+                    sprintf('The extension "%s" is not supported', $ext),
+                    $error_context
+                );
 
-			$ext = strtolower( pathinfo( $source_file, PATHINFO_EXTENSION ) );
-			if ( ! in_array( $ext, [ 'jpg', 'jpeg', 'png' ] ) ) {
-				do_action(
-					WebPify::ACTION_ERROR,
-					sprintf( 'The extension "%s" is not supported', $ext ),
-					$error_context
-				);
+                return false;
+            }
 
-				return FALSE;
-			}
+            $imagick = new \Imagick($source_file);
+            $imagick->setImageFormat('WEBP');
+            $imagick->setOption('webp:method', '6');
+            $imagick->setOption('webp:low-memory', 'true');
 
-			$im = new \Imagick( $source_file );
-			$im->setImageFormat( 'WEBP' );
-			$im->setOption( 'webp:method', '6' );
-			$im->setOption( 'webp:low-memory', 'true' );
+            if ($ext === 'png') {
+                $imagick->setOption('webp:lossless', 'true');
+            }
 
-			if ( $ext === 'png' ) {
-				$im->setOption( 'webp:lossless', 'true' );
-			}
+            return $imagick->writeImage($dest_file);
+        } catch (\Throwable $error) {
+            $error_context[ 'exception' ] = $error;
+            if (isset($imagick)) {
+                $error_context[ 'imagick' ] = $imagick;
+            }
 
-			return $im->writeImage( $dest_file );
-		}
-		catch ( \Throwable $e ) {
+            do_action(
+                WebPify::ACTION_ERROR,
+                $error->getMessage(),
+                $error_context
+            );
 
-			$error_context[ 'exception' ] = $e;
-			if ( isset( $im ) ) {
-				$error_context[ 'imagick' ] = $im;
-			}
+            return false;
+        }
+    }
 
-			do_action(
-				WebPify::ACTION_ERROR,
-				$e->getMessage(),
-				$error_context
-			);
+    public function isActivated(): bool
+    {
 
-			return FALSE;
-		}
-	}
-
-	public function is_activated(): bool {
-
-		return extension_loaded( 'imagick' ) && class_exists( \Imagick::class );
-	}
-
+        return extension_loaded('imagick') && class_exists(\Imagick::class);
+    }
 }

@@ -16,7 +16,7 @@ final class ImageRendererTest extends AbstractTestCase {
 	public function test_basic() {
 
 		$testee = new ImageRenderer();
-		$this->assertInstanceOf( ImageRenderInterface::class, $testee );
+        static::assertInstanceOf( ImageRenderInterface::class, $testee );
 	}
 
 	/**
@@ -32,10 +32,10 @@ final class ImageRendererTest extends AbstractTestCase {
 		$input  = '<img src="foo.jpg" srcset="bar.jpg" />';
 		$output = ( new ImageRenderer( $placeholder ) )->render( $input, 0, '' );
 
-		$this->assertContains( 'data-src="foo.jpg"', $output );
-		$this->assertContains( 'data-srcset="bar.jpg"', $output );
-		$this->assertContains( 'src="' . $placeholder . '"', $output );
-		$this->assertContains( '<noscript>' . $input . '</noscript>', $output );
+        static::assertContains( 'data-src="foo.jpg"', $output );
+        static::assertContains( 'data-srcset="bar.jpg"', $output );
+        static::assertContains( 'src="' . $placeholder . '"', $output );
+        static::assertContains( '<noscript>' . $input . '</noscript>', $output );
 	}
 
 	/**
@@ -49,8 +49,8 @@ final class ImageRendererTest extends AbstractTestCase {
 		$input  = '<img src="foo.jpg" />';
 		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
 
-		$this->assertNotContains( 'src=""', $output );
-		$this->assertContains( '<noscript>' . $input . '</noscript>', $output );
+        static::assertNotContains( 'src=""', $output );
+        static::assertContains( '<noscript>' . $input . '</noscript>', $output );
 	}
 
 	/**
@@ -64,8 +64,8 @@ final class ImageRendererTest extends AbstractTestCase {
 		$input  = '<img src="foo.jpg" />';
 		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
 
-		$this->assertContains( 'data-src="foo.jpg"', $output );
-		$this->assertContains( '<noscript>' . $input . '</noscript>', $output );
+        static::assertContains( 'data-src="foo.jpg"', $output );
+        static::assertContains( '<noscript>' . $input . '</noscript>', $output );
 	}
 
 	/**
@@ -79,8 +79,8 @@ final class ImageRendererTest extends AbstractTestCase {
 		$input  = '<img srcset="foo.jpg" />';
 		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
 
-		$this->assertContains( 'data-srcset="foo.jpg"', $output );
-		$this->assertContains( '<noscript>' . $input . '</noscript>', $output );
+        static::assertContains( 'data-srcset="foo.jpg"', $output );
+        static::assertContains( '<noscript>' . $input . '</noscript>', $output );
 	}
 
 	/**
@@ -94,6 +94,6 @@ final class ImageRendererTest extends AbstractTestCase {
 		$input  = '<div class="foo"></div>';
 		$output = ( new ImageRenderer( '' ) )->render( $input, 0, '' );
 
-		$this->assertSame( $input, $output );
+        static::assertSame( $input, $output );
 	}
 }

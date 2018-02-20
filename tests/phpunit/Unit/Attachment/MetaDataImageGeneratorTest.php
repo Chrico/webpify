@@ -21,7 +21,7 @@ final class MetaDataImageGeneratorTest extends AbstractTestCase {
 			->getMock();
 
 		$testee = new MetaDataImageGenerator( $stub, [] );
-		$this->assertInstanceOf( MetaDataImageGenerator::class, $testee );
+		static::assertInstanceOf( MetaDataImageGenerator::class, $testee );
 	}
 
 	/**
@@ -59,7 +59,7 @@ final class MetaDataImageGeneratorTest extends AbstractTestCase {
 		];
 
 		$testee = new MetaDataImageGenerator( $stub, $wp_uploads );
-		$this->assertSame( $metadata, $testee->generate( $metadata, 0 ) );
+        static::assertSame( $metadata, $testee->generate( $metadata, 0 ) );
 	}
 
 	/**
@@ -97,6 +97,6 @@ final class MetaDataImageGeneratorTest extends AbstractTestCase {
 		];
 
 		$testee = new MetaDataImageGenerator( $stub, $wp_uploads );
-		$this->assertSame( $metadata, $testee->generate( $metadata, 0 ) );
+        static::assertSame( $metadata, $testee->generate( $metadata, 0 ) );
 	}
 }

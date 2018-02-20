@@ -14,7 +14,7 @@ final class LazyLoadScriptDataTest extends AbstractTestCase {
 	public function test_get_options() {
 
 		$testee = new LazyLoadScriptData();
-		$this->assertNotEmpty( $testee->get_options() );
+        static::assertNotEmpty( $testee->options() );
 	}
 
 	/**
@@ -28,7 +28,7 @@ final class LazyLoadScriptDataTest extends AbstractTestCase {
 			->andReturn( $expected );
 
 		$testee = new LazyLoadScriptData();
-		$this->assertSame( $expected, $testee->get_options() );
+        static::assertSame( $expected, $testee->options() );
 	}
 
 }

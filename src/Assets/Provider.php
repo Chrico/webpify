@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace WebPify\Assets;
 
@@ -9,42 +9,49 @@ use WebPify\Core\BootableProviderInterface;
 /**
  * @package WebPify\Assets
  */
-final class Provider implements ServiceProviderInterface, BootableProviderInterface {
+final class Provider implements ServiceProviderInterface, BootableProviderInterface
+{
 
-	public function register( Container $plugin ) {
+    public function register(Container $plugin)
+    {
 
-		$plugin[ LazyLoadScriptData::class ] = function (): LazyLoadScriptData {
+        $plugin->offsetSet(
+            LazyLoadScriptData::class,
+            function (): LazyLoadScriptData {
 
-			return new LazyLoadScriptData();
-		};
+                return new LazyLoadScriptData();
+            }
+        );
 
-		$plugin[ LazyLoadScript::class ] = function ( Container $plugin ): LazyLoadScript {
+        $plugin->offsetSet(
+            LazyLoadScript::class,
+            function (Container $plugin): LazyLoadScript {
 
-			return new LazyLoadScript(
-				$plugin[ 'config.plugin_file' ],
-				$plugin[ LazyLoadScriptData::class ]
-			);
-		};
+                return new LazyLoadScript(
+                    $plugin[ 'config.plugin_file' ],
+                    $plugin[ LazyLoadScriptData::class ]
+                );
+            }
+        );
+    }
 
-	}
+    public function boot(Container $plugin)
+    {
 
-	public function boot( Container $plugin ) {
+        if (is_admin()) {
+            return;
+        }
 
-		if ( is_admin() ) {
-			return;
-		}
+        add_filter(
+            'wp_enqueue_scripts',
+            [$plugin[ LazyLoadScript::class ], 'enqueue']
+        );
 
-		add_filter(
-			'wp_enqueue_scripts',
-			[ $plugin[ LazyLoadScript::class ], 'enqueue' ]
-		);
-
-		add_filter(
-			'script_loader_tag',
-			[ $plugin[ LazyLoadScript::class ], 'print_inline' ],
-			10,
-			2
-		);
-
-	}
+        add_filter(
+            'script_loader_tag',
+            [$plugin[ LazyLoadScript::class ], 'print_inline'],
+            10,
+            2
+        );
+    }
 }

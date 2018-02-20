@@ -3,7 +3,6 @@
 ## Tests
 * Add more UnitTests.
 
-
 ## Configuration
 * Which transformer to use
 * Quality of WebP image.

@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace WebPify\Transformer;
 
@@ -7,40 +7,56 @@ use Pimple\ServiceProviderInterface;
 use WebPify\Transformer\GD\GDImageTransformer;
 use WebPify\Transformer\Imagick\ImagickImageTransformer;
 
+// phpcs:disable Generic.Metrics.NestingLevel.TooHigh
+
 /**
  * @package WebPify\Transformer
  */
-final class Provider implements ServiceProviderInterface {
+final class Provider implements ServiceProviderInterface
+{
 
-	public function register( Container $plugin ) {
+    /**
+     * @param Container $plugin
+     */
+    public function register(Container $plugin)
+    {
 
-		$plugin[ NullTransformer::class ] = function (): NullTransformer {
+        $plugin->offsetSet(
+            NullTransformer::class,
+            function (): NullTransformer {
 
-			return new NullTransformer();
-		};
+                return new NullTransformer();
+            }
+        );
 
-		$plugin[ ImagickImageTransformer::class ] = function (): ImagickImageTransformer {
+        $plugin->offsetSet(
+            ImagickImageTransformer::class,
+            function (): ImagickImageTransformer {
 
-			return new ImagickImageTransformer();
-		};
+                return new ImagickImageTransformer();
+            }
+        );
 
-		$plugin[ GDImageTransformer::class ] = function (): GDImageTransformer {
+        $plugin->offsetSet(
+            GDImageTransformer::class,
+            function (): GDImageTransformer {
 
-			return new GDImageTransformer();
-		};
+                return new GDImageTransformer();
+            }
+        );
 
-		$plugin[ ImageTransformerInterface::class ] = function ( Container $plugin ): ImageTransformerInterface {
+        $plugin->offsetSet(
+            ImageTransformerInterface::class,
+            function (Container $plugin): ImageTransformerInterface {
+                $classes = [GDImageTransformer::class, ImagickImageTransformer::class];
+                foreach ($classes as $class) {
+                    if ($plugin[ $class ]->isActivated()) {
+                        return $plugin[ $class ];
+                    }
+                }
 
-			$classes = [ GDImageTransformer::class, ImagickImageTransformer::class ];
-			foreach ( $classes as $class ) {
-				if ( $plugin[ $class ]->is_activated() ) {
-					return $plugin[ $class ];
-				}
-			}
-
-			return $plugin[ NullTransformer::class ];
-		};
-
-	}
-
+                return $plugin[ NullTransformer::class ];
+            }
+        );
+    }
 }

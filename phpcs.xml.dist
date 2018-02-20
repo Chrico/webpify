@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="WebPify">
+
+	<description>Generating automatically WebP-images and provide them via feature detection and lazy loading.</description>
+
+	<file>./src</file>
+
+	<config name="text_domain" value="webpify"/>
+
+	<rule ref="Inpsyde"/>
+
+</ruleset>

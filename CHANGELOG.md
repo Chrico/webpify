@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0
+- First stable release
+- Moved to PSR-based coding standard.
+- [[#1]](https://github.com/Chrico/webpify/issues/1) - Added new `AttachmentDeletor`
+
 ## 0.2.1
 - Fixed bug where transform failed and `NULL` was used in `dirname()`.
 

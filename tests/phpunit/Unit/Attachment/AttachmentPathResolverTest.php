@@ -17,7 +17,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 		Functions\expect( 'wp_get_upload_dir' )
 			->once();
 
-		$this->assertInstanceOf( AttachmentPathResolver::class, new AttachmentPathResolver( [] ) );
+        static::assertInstanceOf( AttachmentPathResolver::class, new AttachmentPathResolver( [] ) );
 	}
 
 	public function test_for_meta() {
@@ -25,7 +25,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 		Functions\expect( 'wp_get_upload_dir' )
 			->once();
 
-		$this->assertInstanceOf( AttachmentPathResolver::class, AttachmentPathResolver::for_meta( [] ) );
+        static::assertInstanceOf( AttachmentPathResolver::class, AttachmentPathResolver::forMeta( [] ) );
 	}
 
 	/**
@@ -36,7 +36,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 		Functions\expect( 'wp_get_upload_dir' )
 			->once();
 
-		$this->assertSame(
+        static::assertSame(
 			'',
 			( new AttachmentPathResolver( [] ) )->resolve( '', '' )
 		);
@@ -52,7 +52,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 			->once()
 			->andReturn( [ $type => 'bar' ] );
 
-		$this->assertSame(
+        static::assertSame(
 			'',
 			( new AttachmentPathResolver( [] ) )->resolve( '', $type )
 		);
@@ -72,7 +72,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 		Functions\when( 'trailingslashit' )
 			->returnArg();
 
-		$this->assertSame(
+        static::assertSame(
 			'',
 			( new AttachmentPathResolver( $meta ) )->resolve( 'non-existing-size', AttachmentPathResolver::TYPE_DIR )
 		);
@@ -96,7 +96,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 		Functions\when( 'trailingslashit' )
 			->returnArg();
 
-		$this->assertSame(
+        static::assertSame(
 			$expected,
 			( new AttachmentPathResolver( $meta ) )->resolve( 'full', AttachmentPathResolver::TYPE_DIR )
 		);
@@ -134,7 +134,7 @@ final class AttachmentPathResolverTest extends AbstractTestCase {
 			->with( Mockery::type( 'string' ) )
 			->andReturn( $sub_dir );
 
-		$this->assertSame(
+        static::assertSame(
 			$expected,
 			( new AttachmentPathResolver( $meta ) )->resolve( $size, AttachmentPathResolver::TYPE_DIR )
 		);

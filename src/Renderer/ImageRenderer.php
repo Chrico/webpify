@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace WebPify\Renderer;
 
@@ -8,67 +8,69 @@ use WebPify\WebPify;
 /**
  * @package WebPify\Renderer
  */
-final class ImageRenderer implements ImageRenderInterface {
+final class ImageRenderer implements ImageRenderInterface
+{
 
-	/**
-	 * @var string
-	 */
-	private $placeholder;
+    /**
+     * @var string
+     */
+    private $placeholder;
 
-	/**
-	 * @param string $placeholder
-	 */
-	public function __construct( string $placeholder = '' ) {
+    /**
+     * @param string $placeholder
+     */
+    public function __construct(string $placeholder = '')
+    {
 
-		$this->placeholder = $placeholder;
-	}
+        $this->placeholder = $placeholder;
+    }
 
-	public function render( string $img, int $attachment_id, string $size ): string {
+    public function render(string $img, int $attachment_id, string $size): string
+    {
 
-		if ( substr( $img, 0, 4 ) !== '<img' ) {
-			do_action(
-				WebPify::ACTION_ERROR,
-				'The given input is not an <code>img</code>-tag.',
-				func_get_args()
-			);
+        if (substr($img, 0, 4) !== '<img') {
+            do_action(
+                WebPify::ACTION_ERROR,
+                'The given input is not an <code>img</code>-tag.',
+                func_get_args()
+            );
 
-			return $img;
-		}
+            return $img;
+        }
 
-		$replacments = [
-			'data-src="'    => 'src="',
-			'data-srcset="' => 'srcset="',
-		];
+        $replacments = [
+            'data-src="'    => 'src="',
+            'data-srcset="' => 'srcset="',
+        ];
 
-		if ( $this->placeholder !== '' ) {
-			$replacments[ 'src="' . $this->placeholder . '" />' ] = '/>';
-		}
+        if ($this->placeholder !== '') {
+            $replacments[ 'src="' . $this->placeholder . '" />' ] = '/>';
+        }
 
-		if ( $attachment_id !== 0 ) {
-			$webp = new WebPAttachment( $attachment_id );
+        if ($attachment_id !== 0) {
+            $webp = new WebPAttachment($attachment_id);
 
-			$webp_src = $webp->src( $size );
-			if ( $webp_src !== '' ) {
-				$key = WebPAttachment::DATA_SRC . '="' . $webp_src . '" />';
+            $webp_src = $webp->src($size);
+            if ($webp_src !== '') {
+                $key = WebPAttachment::DATA_SRC . '="' . $webp_src . '" />';
 
-				$replacments[ $key ] = '/>';
-			}
+                $replacments[ $key ] = '/>';
+            }
 
-			$webp_srcset = $webp->srcset( $size );
-			if ( $webp_srcset !== '' ) {
-				$key = WebPAttachment::DATA_SRCSET . '="' . $webp_srcset . '" />';
+            $webp_srcset = $webp->srcset($size);
+            if ($webp_srcset !== '') {
+                $key = WebPAttachment::DATA_SRCSET . '="' . $webp_srcset . '" />';
 
-				$replacments[ $key ] = '/>';
-			};
-		}
+                $replacments[ $key ] = '/>';
+            };
+        }
 
-		$output = str_replace(
-			array_values( $replacments ),
-			array_keys( $replacments ),
-			$img
-		);
+        $output = str_replace(
+            array_values($replacments),
+            array_keys($replacments),
+            $img
+        );
 
-		return $output . '<noscript>' . $img . '</noscript>';
-	}
-
+        return $output . '<noscript>' . $img . '</noscript>';
+    }
 }

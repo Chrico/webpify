@@ -18,10 +18,10 @@ final class WebPifyTest extends AbstractTestCase {
 
 		$testee = new WebPify();
 
-		$this->assertInstanceOf( ContainerInterface::class, $testee );
-		$this->assertInstanceOf( Container::class, $testee );
-		$this->assertCount( 0, $testee->providers() );
-		$this->assertFalse( $testee->booted() );
+		static::assertInstanceOf( ContainerInterface::class, $testee );
+        static::assertInstanceOf( Container::class, $testee );
+        static::assertCount( 0, $testee->providers() );
+        static::assertFalse( $testee->booted() );
 	}
 
 	public function test_constructor() {
@@ -30,8 +30,8 @@ final class WebPifyTest extends AbstractTestCase {
 		$value = 'bar';
 
 		$testee = new WebPify( [ $key => $value ] );
-		$this->assertSame( $value, $testee->get( $key ) );
-		$this->assertSAme( $value, $testee[ $key ] );
+        static::assertSame( $value, $testee->get( $key ) );
+        static::assertSAme( $value, $testee[ $key ] );
 	}
 
 	public function test_register() {
@@ -45,7 +45,7 @@ final class WebPifyTest extends AbstractTestCase {
 		$testee = new WebPify();
 		$testee->register( $stub );
 
-		$this->assertCount( 1, $testee->providers() );
+        static::assertCount( 1, $testee->providers() );
 	}
 
 	public function test_boot() {
@@ -57,6 +57,6 @@ final class WebPifyTest extends AbstractTestCase {
 		$testee = new WebPify();
 		$testee->boot();
 
-		$this->assertTrue( $testee->booted() );
+        static::assertTrue( $testee->booted() );
 	}
 }
