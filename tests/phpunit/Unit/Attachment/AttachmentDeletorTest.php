@@ -14,10 +14,6 @@ final class AttachmentDeletorTest extends AbstractTestCase
 
     public function test_basic()
     {
-
-        Functions\expect('wp_get_upload_dir')
-            ->once();
-
         static::assertInstanceOf(AttachmentDeletor::class, new AttachmentDeletor());
     }
 

@@ -25,7 +25,6 @@ class AttachmentDeletor
         $sizes[] = 'full';
 
         foreach ($sizes as $size) {
-
             if (!$attachment->sizeExists($size)) {
                 continue;
             }
