@@ -49,7 +49,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
         add_filter(
             'script_loader_tag',
-            [$plugin[ LazyLoadScript::class ], 'print_inline'],
+            [$plugin[ LazyLoadScript::class ], 'printInline'],
             10,
             2
         );
