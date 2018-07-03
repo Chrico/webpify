@@ -84,11 +84,9 @@ final class WebPify extends Container implements ContainerInterface
         $this->booted = true;
 
         /**
-         * Fires right before GoogleTagManager gets bootstrapped.
+         * Fires right before Plugin gets bootstrapped.
          *
          * Hook here to register custom service providers.
-         *
-         * @param GoogleTagManager
          */
         \do_action(self::ACTION_BOOT, $this);
 
