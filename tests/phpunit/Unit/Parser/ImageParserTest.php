@@ -147,7 +147,7 @@ final class ImageParserTest extends AbstractTestCase
      *
      * @dataProvider provide_get_attributes
      */
-    public function test_invalid_get_attributes(string $html, array $expected)
+    public function test_get_attributes(string $html, array $expected)
     {
         static::assertSame(
             $expected,
@@ -155,7 +155,7 @@ final class ImageParserTest extends AbstractTestCase
         );
     }
 
-    public function provide_invalid_get_attributes()
+    public function provide_get_attributes()
     {
         $nothing_found = [];
 
