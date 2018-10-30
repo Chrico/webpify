@@ -13,25 +13,25 @@ class AttachmentPathResolver
 
     private $meta = [];
 
-    private $uploads_dir = [];
+    private $uploadsDir = [];
 
     /**
-     * @param array $attachment_meta
+     * @param array $attachmentMeta
      */
-    public function __construct(array $attachment_meta)
+    public function __construct(array $attachmentMeta)
     {
-        $this->meta = $attachment_meta;
-        $this->uploads_dir = wp_get_upload_dir();
+        $this->meta = $attachmentMeta;
+        $this->uploadsDir = wp_get_upload_dir();
     }
 
     /**
-     * @param array $attachment_meta
+     * @param array $attachmentMeta
      *
      * @return AttachmentPathResolver
      */
-    public static function forMeta(array $attachment_meta): AttachmentPathResolver
+    public static function forMeta(array $attachmentMeta): AttachmentPathResolver
     {
-        return new static($attachment_meta);
+        return new static($attachmentMeta);
     }
 
     /**
@@ -54,7 +54,7 @@ class AttachmentPathResolver
      */
     public function resolve(string $size, string $type): string
     {
-        if (! isset($this->uploads_dir[$type])) {
+        if (! isset($this->uploadsDir[$type])) {
             return '';
         }
 
@@ -66,7 +66,7 @@ class AttachmentPathResolver
         }
 
         $full = $this->meta['file'];
-        $dir = trailingslashit($this->uploads_dir[$type]);
+        $dir = trailingslashit($this->uploadsDir[$type]);
 
         if ($size === 'full') {
             return $dir.$full;

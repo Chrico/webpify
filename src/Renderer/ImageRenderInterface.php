@@ -10,10 +10,10 @@ interface ImageRenderInterface
 
     /**
      * @param string $img
-     * @param int $attachment_id
+     * @param int $attachmentId
      * @param string $size
      *
      * @return string
      */
-    public function render(string $img, int $attachment_id, string $size): string;
+    public function render(string $img, int $attachmentId, string $size): string;
 }

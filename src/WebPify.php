@@ -105,6 +105,7 @@ final class WebPify implements ContainerInterface
      * @return WebPify
      * @throws AlreadyBootedException
      */
+    // phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
     public function set(string $id, $value): WebPify
     {
         if ($this->booted) {
@@ -122,6 +123,8 @@ final class WebPify implements ContainerInterface
      * @return mixed
      * @throws NotFoundException
      */
+    // phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
+    // phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration.NoReturnType
     public function get($id)
     {
         if (! $this->has($id)) {
@@ -147,6 +150,7 @@ final class WebPify implements ContainerInterface
      *
      * @return bool
      */
+    // phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
     public function has($id): bool
     {
         return isset($this->values[$id]);

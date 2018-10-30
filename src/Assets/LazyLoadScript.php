@@ -13,7 +13,7 @@ final class LazyLoadScript
     /**
      * @var string
      */
-    private $plugin_file_path;
+    private $pluginFilePath;
 
     /**
      * @var LazyLoadScriptData
@@ -21,12 +21,12 @@ final class LazyLoadScript
     private $data;
 
     /**
-     * @param string $plugin_file_path
+     * @param string $pluginFilePath
      * @param LazyLoadScriptData $data
      */
-    public function __construct(string $plugin_file_path, LazyLoadScriptData $data)
+    public function __construct(string $pluginFilePath, LazyLoadScriptData $data)
     {
-        $this->plugin_file_path = $plugin_file_path;
+        $this->pluginFilePath = $pluginFilePath;
         $this->data = $data;
     }
 
@@ -52,12 +52,12 @@ final class LazyLoadScript
      */
     private function url(): string
     {
-        $file_name = self::HANDLE.($this->isDebug()
+        $fileName = self::HANDLE.($this->isDebug()
                 ? '.js'
                 : '.min.js');
         $subdir = '/assets/js/dist';
 
-        $url = plugins_url("{$subdir}/{$file_name}", $this->plugin_file_path);
+        $url = plugins_url("{$subdir}/{$fileName}", $this->pluginFilePath);
 
         return $url;
     }

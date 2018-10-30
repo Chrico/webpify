@@ -20,7 +20,7 @@
         "php": ">=7",
         "brain/monkey": "~2.1",
         "phpunit/phpunit": "~6.0",
-        "inpsyde/php-coding-standards": "^0.8"
+        "inpsyde/php-coding-standards": "~0.13"
     },
     "autoload": {
         "psr-4": {
@@ -34,5 +34,9 @@
     },
     "config": {
         "optimize-autoloader": true
+    },
+    "suggest": {
+        "ext-gd": "If you want to transform images into WebP-format, you can use the ext-gd extension",
+        "ext-imagick": "If you want to transform into WebP-format, you can use the ext-imagick extension"
     }
 }

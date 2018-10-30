@@ -9,12 +9,12 @@ interface ImageTransformerInterface
 {
 
     /**
-     * @param string $source_file the source file with full path in file-system.
-     * @param string $dest_file the destination file
+     * @param string $sourceFile the source file with full path in file-system.
+     * @param string $destFile the destination file
      *
      * @return bool     TRUE if successfully created | FALSE if an error occurred.
      */
-    public function create(string $source_file, string $dest_file): bool;
+    public function create(string $sourceFile, string $destFile): bool;
 
     /**
      * Function to detect, if the current Transformer is available.

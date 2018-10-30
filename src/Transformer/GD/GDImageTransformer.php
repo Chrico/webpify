@@ -11,65 +11,65 @@ use WebPify\WebPify;
 final class GDImageTransformer implements ImageTransformerInterface
 {
 
-    private $image_functions = [
+    private $imageFunctions = [
         'jpg' => 'imagecreatefromjpeg',
         'jpeg' => 'imagecreatefromjpeg',
         'png' => 'imagecreatefrompng',
     ];
 
-    public function create(string $source_file, string $dest_file): bool
+    public function create(string $sourceFile, string $destFile): bool
     {
-        $error_context = [
-            'dest_file' => $dest_file,
-            'source_file' => $source_file,
-            'image_functions' => $this->image_functions,
+        $errorContext = [
+            'dest_file' => $destFile,
+            'source_file' => $sourceFile,
+            'image_functions' => $this->imageFunctions,
         ];
 
-        $ext = pathinfo($source_file, PATHINFO_EXTENSION);
-        if (! isset($this->image_functions[$ext])) {
+        $ext = pathinfo($sourceFile, PATHINFO_EXTENSION);
+        if (! isset($this->imageFunctions[$ext])) {
             do_action(
                 WebPify::ACTION_ERROR,
                 sprintf('Could not find "%s" in available extension.', $ext),
-                $error_context
+                $errorContext
             );
 
             return false;
         }
 
-        $func = $this->image_functions[$ext];
+        $func = $this->imageFunctions[$ext];
         // adding the selected function to error context for debugging.
-        $error_context['func'] = $func;
+        $errorContext['func'] = $func;
         if (! function_exists($func)) {
             do_action(
                 WebPify::ACTION_ERROR,
                 sprintf('The extension "%s" is not available.', $ext),
-                $error_context
+                $errorContext
             );
 
             return false;
         }
 
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        $resource = @$func($source_file);
+        $resource = @$func($sourceFile);
         if (! $resource) {
             do_action(
                 WebPify::ACTION_ERROR,
                 sprintf('Creating resource failed.', $ext),
-                $error_context
+                $errorContext
             );
 
             return false;
         }
 
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        $success = @imagewebp($resource, $dest_file);
+        $success = @imagewebp($resource, $destFile);
         imagedestroy($resource);
 
         if (! $success) {
             do_action(
                 WebPify::ACTION_ERROR,
                 'Image creation failed.',
-                $error_context
+                $errorContext
             );
 
             return false;

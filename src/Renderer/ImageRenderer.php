@@ -24,7 +24,7 @@ final class ImageRenderer implements ImageRenderInterface
         $this->placeholder = $placeholder;
     }
 
-    public function render(string $img, int $attachment_id, string $size): string
+    public function render(string $img, int $attachmentId, string $size): string
     {
         if (substr($img, 0, 4) !== '<img') {
             do_action(
@@ -36,36 +36,36 @@ final class ImageRenderer implements ImageRenderInterface
             return $img;
         }
 
-        $replacments = [
+        $replacements = [
             'data-src="' => 'src="',
             'data-srcset="' => 'srcset="',
         ];
 
         if ($this->placeholder !== '') {
-            $replacments['src="'.$this->placeholder.'" />'] = '/>';
+            $replacements['src="'.$this->placeholder.'" />'] = '/>';
         }
 
-        if ($attachment_id !== 0) {
-            $webp = new WebPAttachment($attachment_id);
+        if ($attachmentId !== 0) {
+            $webp = new WebPAttachment($attachmentId);
 
-            $webp_src = $webp->src($size);
-            if ($webp_src !== '') {
-                $key = WebPAttachment::DATA_SRC.'="'.$webp_src.'" />';
+            $webpSrc = $webp->src($size);
+            if ($webpSrc !== '') {
+                $key = WebPAttachment::DATA_SRC.'="'.$webpSrc.'" />';
 
-                $replacments[$key] = '/>';
+                $replacements[$key] = '/>';
             }
 
-            $webp_srcset = $webp->srcset($size);
-            if ($webp_srcset !== '') {
-                $key = WebPAttachment::DATA_SRCSET.'="'.$webp_srcset.'" />';
+            $webpSrcset = $webp->srcset($size);
+            if ($webpSrcset !== '') {
+                $key = WebPAttachment::DATA_SRCSET.'="'.$webpSrcset.'" />';
 
-                $replacments[$key] = '/>';
+                $replacements[$key] = '/>';
             };
         }
 
         $output = str_replace(
-            array_values($replacments),
-            array_keys($replacments),
+            array_values($replacements),
+            array_keys($replacements),
             $img
         );
 

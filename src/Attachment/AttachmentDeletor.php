@@ -13,13 +13,13 @@ class AttachmentDeletor
 {
 
     /**
-     * @param int $post_id
+     * @param int $postId
      *
      * @return bool
      */
-    public function delete(int $post_id): bool
+    public function delete(int $postId): bool
     {
-        $attachment = new WebPAttachment($post_id);
+        $attachment = new WebPAttachment($postId);
 
         $sizes = array_keys($attachment->sizes());
         $sizes[] = 'full';
@@ -41,7 +41,7 @@ class AttachmentDeletor
                     WebPify::ACTION_ERROR,
                     'Could not delete file',
                     [
-                        'post_id' => $post_id,
+                        'post_id' => $postId,
                         'path' => $path,
                     ]
                 );

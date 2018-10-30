@@ -91,7 +91,13 @@ final class ImageParser implements ParserInterface
         ];
     }
 
-    private function size(string $currentFile, $id): string
+    /**
+     * @param string $currentFile
+     * @param int $id
+     *
+     * @return string
+     */
+    private function size(string $currentFile, int $id): string
     {
         $matchedSize = 'full';
 

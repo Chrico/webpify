@@ -19,19 +19,19 @@ final class MediaEditColumn
         return $columns;
     }
 
-    public function content(string $column_name, int $attachment_id): bool
+    public function content(string $columnName, int $attachmentId): bool
     {
-        if ($column_name !== self::ID) {
+        if ($columnName !== self::ID) {
             return false;
         }
 
-        $original = wp_get_attachment_metadata($attachment_id, true);
+        $original = wp_get_attachment_metadata($attachmentId, true);
 
         if (! isset($original['file'])) {
             return false;
         }
 
-        $webp = new WebPAttachment($attachment_id);
+        $webp = new WebPAttachment($attachmentId);
         $sizes = [];
         foreach ($original['sizes'] as $size => $data) {
             $exists = $webp->sizeExists($size);

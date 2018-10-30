@@ -8,7 +8,7 @@ namespace WebPify\Transformer;
 class NullTransformer implements ImageTransformerInterface
 {
 
-    public function create(string $source_file, string $dest_file): bool
+    public function create(string $sourceFile, string $destFile): bool
     {
         return false;
     }

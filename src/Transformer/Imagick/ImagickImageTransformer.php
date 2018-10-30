@@ -14,25 +14,25 @@ use WebPify\WebPify;
 final class ImagickImageTransformer implements ImageTransformerInterface
 {
 
-    public function create(string $source_file, string $dest_file): bool
+    public function create(string $sourceFile, string $destFile): bool
     {
         try {
-            $error_context = [
-                'source_file' => $source_file,
-                'dest_file' => $dest_file,
+            $errorContext = [
+                'source_file' => $sourceFile,
+                'dest_file' => $destFile,
             ];
 
-            if (! file_exists($source_file)) {
+            if (! file_exists($sourceFile)) {
                 do_action(
                     WebPify::ACTION_ERROR,
                     'Source file does not exist.',
-                    $error_context
+                    $errorContext
                 );
 
                 return false;
             }
 
-            $ext = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
+            $ext = strtolower(pathinfo($sourceFile, PATHINFO_EXTENSION));
             $allowedExtensions = [
                 'jpg',
                 'jpeg',
@@ -42,13 +42,13 @@ final class ImagickImageTransformer implements ImageTransformerInterface
                 do_action(
                     WebPify::ACTION_ERROR,
                     sprintf('The extension "%s" is not supported', $ext),
-                    $error_context
+                    $errorContext
                 );
 
                 return false;
             }
 
-            $imagick = new \Imagick($source_file);
+            $imagick = new \Imagick($sourceFile);
             $imagick->setImageFormat('WEBP');
             $imagick->setOption('webp:method', '6');
             $imagick->setOption('webp:low-memory', 'true');
@@ -57,17 +57,17 @@ final class ImagickImageTransformer implements ImageTransformerInterface
                 $imagick->setOption('webp:lossless', 'true');
             }
 
-            return $imagick->writeImage($dest_file);
+            return $imagick->writeImage($destFile);
         } catch (\Throwable $error) {
-            $error_context['exception'] = $error;
+            $errorContext['exception'] = $error;
             if (isset($imagick)) {
-                $error_context['imagick'] = $imagick;
+                $errorContext['imagick'] = $imagick;
             }
 
             do_action(
                 WebPify::ACTION_ERROR,
                 $error->getMessage(),
-                $error_context
+                $errorContext
             );
 
             return false;

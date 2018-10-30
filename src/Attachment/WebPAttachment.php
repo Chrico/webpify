@@ -108,22 +108,22 @@ class WebPAttachment
     }
 
     /**
-     * @param array $original_meta
+     * @param array $originalMeta
      * @param string $size
      *
      * @return int filesize in bytes.
      */
-    public function diffFilesize(array $original_meta, string $size): int
+    public function diffFilesize(array $originalMeta, string $size): int
     {
-        $webp_file = $this->attachmentPathResolver->withDir($size);
-        $original_file = AttachmentPathResolver::forMeta($original_meta)
+        $webpFile = $this->attachmentPathResolver->withDir($size);
+        $originalFile = AttachmentPathResolver::forMeta($originalMeta)
             ->withDir($size);
 
-        if ($webp_file === '' || $original_file === '') {
+        if ($webpFile === '' || $originalFile === '') {
             return 0;
         }
 
-        return filesize($webp_file) - filesize($original_file);
+        return filesize($webpFile) - filesize($originalFile);
     }
 
     public function meta(): array

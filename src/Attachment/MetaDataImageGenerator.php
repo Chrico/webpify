@@ -19,32 +19,32 @@ class MetaDataImageGenerator
     /**
      * @var array
      */
-    private $upload_dir;
+    private $uploadDir;
 
     /**
      * @param ImageTransformerInterface $transformer
-     * @param array $upload_dir
+     * @param array $uploadDir
      */
-    public function __construct(ImageTransformerInterface $transformer, array $upload_dir)
+    public function __construct(ImageTransformerInterface $transformer, array $uploadDir)
     {
         $this->transformer = $transformer;
-        $this->upload_dir = $upload_dir;
+        $this->uploadDir = $uploadDir;
     }
 
     /**
      * @param array $metadata
-     * @param int $attachment_id
+     * @param int $attachmentId
      *
      * @return array
      */
-    public function generate(array $metadata, int $attachment_id): array
+    public function generate(array $metadata, int $attachmentId): array
     {
         // we've to use the "basedir" for the "full"-image,
         // because the "file" already contains the subdir.
-        $dir = trailingslashit($this->upload_dir['basedir']);
-        $webp_metadata = $this->createMetadata($metadata, $dir);
+        $dir = trailingslashit($this->uploadDir['basedir']);
+        $webpMetadata = $this->createMetadata($metadata, $dir);
 
-        if (! isset($webp_metadata['file'])) {
+        if (! isset($webpMetadata['file'])) {
             return $metadata;
         }
 
@@ -52,18 +52,18 @@ class MetaDataImageGenerator
         // because the "sizes" are stored only with filename.
         $dir .= trailingslashit(dirname($metadata['file']));
         // create all sizes.
-        $webp_metadata['sizes'] = [];
+        $webpMetadata['sizes'] = [];
         foreach ($metadata['sizes'] as $size => $data) {
-            $webp_data = $this->createMetadata($data, $dir);
-            if (isset($webp_data['file'])) {
-                $webp_metadata['sizes'][$size] = $webp_data;
+            $webpData = $this->createMetadata($data, $dir);
+            if (isset($webpData['file'])) {
+                $webpMetadata['sizes'][$size] = $webpData;
             }
         }
 
         $success = (bool) update_post_meta(
-            $attachment_id,
+            $attachmentId,
             WebPAttachment::ID,
-            $webp_metadata
+            $webpMetadata
         );
 
         if (! $success) {
@@ -71,8 +71,8 @@ class MetaDataImageGenerator
             // So no panic when update_post_meta returns false.
             do_action(
                 WebPify::ACTION_ERROR,
-                'An error occured while updating the WebP-metadata.',
-                ['metadata' => $metadata, 'webp_metadata' => $webp_metadata]
+                'An error occurred while updating the WebP-metadata.',
+                ['metadata' => $metadata, 'webpMetadata' => $webpMetadata]
             );
         }
 
@@ -89,10 +89,10 @@ class MetaDataImageGenerator
      */
     private function createMetadata(array $data, string $dir): array
     {
-        $source_file = $dir.$data['file'];
-        $dest_file = $source_file.'.webp';
+        $sourceFile = $dir.$data['file'];
+        $destFile = $sourceFile.'.webp';
 
-        if (! $this->transformer->create($source_file, $dest_file)) {
+        if (! $this->transformer->create($sourceFile, $destFile)) {
             return [];
         }
 
@@ -100,7 +100,7 @@ class MetaDataImageGenerator
             'width' => $data['width'],
             'height' => $data['height'],
             'mime-type' => 'image/webp',
-            'file' => str_replace($dir, '', $dest_file),
+            'file' => str_replace($dir, '', $destFile),
         ];
     }
 }
