@@ -10,13 +10,11 @@ class NullTransformer implements ImageTransformerInterface
 
     public function create(string $source_file, string $dest_file): bool
     {
-
         return false;
     }
 
     public function isActivated(): bool
     {
-
         return true;
     }
 }

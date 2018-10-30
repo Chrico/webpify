@@ -10,7 +10,7 @@ interface ImageTransformerInterface
 
     /**
      * @param string $source_file the source file with full path in file-system.
-     * @param string $dest_file   the destination file
+     * @param string $dest_file the destination file
      *
      * @return bool     TRUE if successfully created | FALSE if an error occurred.
      */

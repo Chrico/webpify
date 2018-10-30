@@ -4,9 +4,8 @@ namespace WebPify\Tests\Unit;
 
 use Brain\Monkey\Actions;
 use Mockery;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use WebPify\App\Provider;
 use WebPify\WebPify;
 
 /**
@@ -19,24 +18,13 @@ final class WebPifyTest extends AbstractTestCase {
 		$testee = new WebPify();
 
 		static::assertInstanceOf( ContainerInterface::class, $testee );
-        static::assertInstanceOf( Container::class, $testee );
         static::assertCount( 0, $testee->providers() );
         static::assertFalse( $testee->booted() );
 	}
 
-	public function test_constructor() {
-
-		$key   = 'foo';
-		$value = 'bar';
-
-		$testee = new WebPify( [ $key => $value ] );
-        static::assertSame( $value, $testee->get( $key ) );
-        static::assertSAme( $value, $testee[ $key ] );
-	}
-
 	public function test_register() {
 
-		$stub = $this->getMockBuilder( ServiceProviderInterface::class )
+		$stub = $this->getMockBuilder( Provider::class )
 			->getMock();
 
 		$stub->expects( $this->once() )

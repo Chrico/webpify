@@ -2,9 +2,11 @@
 
 namespace WebPify;
 
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use WebPify\App\BootableProvider;
+use WebPify\App\Provider;
+use WebPify\Exception\AlreadyBootedException;
+use WebPify\Exception\NotFoundException;
 
 // phpcs:disable InpsydeCodingStandard.CodeQuality.ReturnTypeDeclaration.NoReturnType
 // phpcs:disable InpsydeCodingStandard.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
@@ -12,7 +14,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @package WebPify
  */
-final class WebPify extends Container implements ContainerInterface
+final class WebPify implements ContainerInterface
 {
 
     const ACTION_BOOT = 'WebPify.boot';
@@ -28,33 +30,32 @@ final class WebPify extends Container implements ContainerInterface
      */
     private $providers = [];
 
+    private $values = [];
+
     /**
-     * Registers a service provider.
-     *
-     * @param ServiceProviderInterface $provider A ServiceProviderInterface instance
-     * @param array                    $values   An array of values that customizes the provider
+     * @param Provider $provider
      *
      * @return WebPify
+     * @throws AlreadyBootedException
      */
-    public function register(ServiceProviderInterface $provider, array $values = []): WebPify
+    public function register(Provider $provider): WebPify
     {
+        if ($this->booted) {
+            throw new AlreadyBootedException();
+        }
 
         $this->providers[] = $provider;
-        $provider->register($this);
 
-        foreach ($values as $key => $value) {
-            $this[ $key ] = $value;
-        }
+        $provider->register($this);
 
         return $this;
     }
 
     /**
-     * @return ServiceProviderInterface[]
+     * @return Provider[]
      */
     public function providers(): array
     {
-
         return $this->providers;
     }
 
@@ -63,7 +64,6 @@ final class WebPify extends Container implements ContainerInterface
      */
     public function booted(): bool
     {
-
         return $this->booted;
     }
 
@@ -77,7 +77,6 @@ final class WebPify extends Container implements ContainerInterface
      */
     public function boot(): bool
     {
-
         if ($this->booted) {
             return false;
         }
@@ -91,7 +90,7 @@ final class WebPify extends Container implements ContainerInterface
         \do_action(self::ACTION_BOOT, $this);
 
         foreach ($this->providers as $provider) {
-            if ($provider instanceof Core\BootableProviderInterface) {
+            if ($provider instanceof BootableProvider) {
                 $provider->boot($this);
             }
         }
@@ -101,21 +100,55 @@ final class WebPify extends Container implements ContainerInterface
 
     /**
      * @param string $id
-     * @return mixed
+     * @param $value
+     *
+     * @return WebPify
+     * @throws AlreadyBootedException
      */
-    public function get($id)
+    public function set(string $id, $value): WebPify
     {
+        if ($this->booted) {
+            throw new AlreadyBootedException();
+        }
 
-        return $this[ $id ];
+        $this->values[$id] = $value;
+
+        return $this;
     }
 
     /**
      * @param string $id
+     *
+     * @return mixed
+     * @throws NotFoundException
+     */
+    public function get($id)
+    {
+        if (! $this->has($id)) {
+            throw new NotFoundException(
+                sprintf('No entry was found for "%s identifier.', (string) $id)
+            );
+        }
+
+        if (! \is_object($this->values[$id])
+            || ! \method_exists($this->values[$id], '__invoke')
+        ) {
+            return $this->values[$id];
+        }
+
+        $raw = $this->values[$id];
+        $val = $this->values[$id] = $raw($this);
+
+        return $val;
+    }
+
+    /**
+     * @param string $id
+     *
      * @return bool
      */
     public function has($id): bool
     {
-
-        return isset($this[ $id ]);
+        return isset($this->values[$id]);
     }
 }

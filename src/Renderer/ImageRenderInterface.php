@@ -10,7 +10,7 @@ interface ImageRenderInterface
 
     /**
      * @param string $img
-     * @param int    $attachment_id
+     * @param int $attachment_id
      * @param string $size
      *
      * @return string

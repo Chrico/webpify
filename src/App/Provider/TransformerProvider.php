@@ -1,61 +1,58 @@
 <?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
-namespace WebPify\Transformer;
+namespace WebPify\App\Provider;
 
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
+use WebPify\App\Provider;
 use WebPify\Transformer\GD\GDImageTransformer;
+use WebPify\Transformer\ImageTransformerInterface;
 use WebPify\Transformer\Imagick\ImagickImageTransformer;
+use WebPify\Transformer\NullTransformer;
+use WebPify\WebPify;
 
 // phpcs:disable Generic.Metrics.NestingLevel.TooHigh
 
 /**
+ * Class TransformerProvider
+ *
  * @package WebPify\Transformer
  */
-final class Provider implements ServiceProviderInterface
+final class TransformerProvider implements Provider
 {
 
-    /**
-     * @param Container $plugin
-     */
-    public function register(Container $plugin)
+    public function register(WebPify $plugin)
     {
-
-        $plugin->offsetSet(
+        $plugin->set(
             NullTransformer::class,
             function (): NullTransformer {
-
                 return new NullTransformer();
             }
         );
 
-        $plugin->offsetSet(
+        $plugin->set(
             ImagickImageTransformer::class,
             function (): ImagickImageTransformer {
-
                 return new ImagickImageTransformer();
             }
         );
 
-        $plugin->offsetSet(
+        $plugin->set(
             GDImageTransformer::class,
             function (): GDImageTransformer {
-
                 return new GDImageTransformer();
             }
         );
 
-        $plugin->offsetSet(
+        $plugin->set(
             ImageTransformerInterface::class,
-            function (Container $plugin): ImageTransformerInterface {
+            function (WebPify $plugin): ImageTransformerInterface {
                 $classes = [GDImageTransformer::class, ImagickImageTransformer::class];
                 foreach ($classes as $class) {
-                    if ($plugin[ $class ]->isActivated()) {
-                        return $plugin[ $class ];
+                    if ($plugin->get($class)->isActivated()) {
+                        return $plugin->get($class);
                     }
                 }
 
-                return $plugin[ NullTransformer::class ];
+                return $plugin->get(NullTransformer::class);
             }
         );
     }

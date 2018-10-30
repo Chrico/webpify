@@ -23,52 +23,50 @@ class MetaDataImageGenerator
 
     /**
      * @param ImageTransformerInterface $transformer
-     * @param array                     $upload_dir
+     * @param array $upload_dir
      */
     public function __construct(ImageTransformerInterface $transformer, array $upload_dir)
     {
-
         $this->transformer = $transformer;
-        $this->upload_dir  = $upload_dir;
+        $this->upload_dir = $upload_dir;
     }
 
     /**
      * @param array $metadata
-     * @param int   $attachment_id
+     * @param int $attachment_id
      *
      * @return array
      */
     public function generate(array $metadata, int $attachment_id): array
     {
-
         // we've to use the "basedir" for the "full"-image,
         // because the "file" already contains the subdir.
-        $dir           = trailingslashit($this->upload_dir[ 'basedir' ]);
+        $dir = trailingslashit($this->upload_dir['basedir']);
         $webp_metadata = $this->createMetadata($metadata, $dir);
 
-        if (!isset($webp_metadata[ 'file' ])) {
+        if (! isset($webp_metadata['file'])) {
             return $metadata;
         }
 
         // append the subdir from full image,
         // because the "sizes" are stored only with filename.
-        $dir .= trailingslashit(dirname($metadata[ 'file' ]));
+        $dir .= trailingslashit(dirname($metadata['file']));
         // create all sizes.
-        $webp_metadata[ 'sizes' ] = [];
-        foreach ($metadata[ 'sizes' ] as $size => $data) {
+        $webp_metadata['sizes'] = [];
+        foreach ($metadata['sizes'] as $size => $data) {
             $webp_data = $this->createMetadata($data, $dir);
-            if (isset($webp_data[ 'file' ])) {
-                $webp_metadata[ 'sizes' ][ $size ] = $webp_data;
+            if (isset($webp_data['file'])) {
+                $webp_metadata['sizes'][$size] = $webp_data;
             }
         }
 
-        $success = (bool)update_post_meta(
+        $success = (bool) update_post_meta(
             $attachment_id,
             WebPAttachment::ID,
             $webp_metadata
         );
 
-        if (!$success) {
+        if (! $success) {
             // Note: WP returns "false" when the existing PostMeta is equal to the new one.
             // So no panic when update_post_meta returns false.
             do_action(
@@ -84,26 +82,25 @@ class MetaDataImageGenerator
     /**
      * Internal function to create the metadata.
      *
-     * @param array  $data
+     * @param array $data
      * @param string $dir
      *
      * @return array
      */
     private function createMetadata(array $data, string $dir): array
     {
+        $source_file = $dir.$data['file'];
+        $dest_file = $source_file.'.webp';
 
-        $source_file = $dir . $data[ 'file' ];
-        $dest_file   = $source_file . '.webp';
-
-        if (!$this->transformer->create($source_file, $dest_file)) {
+        if (! $this->transformer->create($source_file, $dest_file)) {
             return [];
         }
 
         return [
-            'width'     => $data[ 'width' ],
-            'height'    => $data[ 'height' ],
+            'width' => $data['width'],
+            'height' => $data['height'],
             'mime-type' => 'image/webp',
-            'file'      => str_replace($dir, '', $dest_file),
+            'file' => str_replace($dir, '', $dest_file),
         ];
     }
 }

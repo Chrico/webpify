@@ -8,18 +8,11 @@ use WebPify\Renderer\ImageRenderInterface;
 /**
  * @package WebPify\Parser
  */
-final class RegexImageParser implements ParserInterface
+final class ImageParser implements ParserInterface
 {
 
-    /**
-     * RegExes to parse the <img>-tag and collect required values.
-     *
-     * @var array
-     */
-    private $regex_search = [
-        'id'   => '/wp-image-([0-9]+)/i',
-        'size' => '/size-([A-Za-z-_0-9]+)/i',
-    ];
+    const SRC_REGEX = '/src="([^"]*)"/i';
+    const ID_REGEX = '/wp-image-([0-9]+)/i';
 
     /**
      * @var ImageRenderInterface
@@ -33,7 +26,6 @@ final class RegexImageParser implements ParserInterface
      */
     public function __construct(ImageRenderInterface $renderer = null)
     {
-
         $this->renderer = $renderer ?? new ImageRenderer();
     }
 
@@ -53,10 +45,14 @@ final class RegexImageParser implements ParserInterface
         return preg_replace_callback(
             '/<img [^>]+>/',
             function (array $match): string {
-                $img        = $match[ 0 ];
+                $img = $match[0];
                 $attributes = $this->attributes($img);
 
-                return $this->renderer->render($img, (int)$attributes[ 'id' ], $attributes[ 'size' ]);
+                if (! isset($attributes['id'])) {
+                    return $img;
+                }
+
+                return $this->renderer->render($img, (int) $attributes['id'], $attributes['size']);
             },
             $content
         );
@@ -71,18 +67,47 @@ final class RegexImageParser implements ParserInterface
      */
     public function attributes(string $html): array
     {
-        $data = array_map(
-            function (string $regex) use ($html): string {
-                // phpcs:disable WordPress.Arrays.CommaAfterArrayItem.NoComma)
-                if (preg_match($regex, $html, $value)) {
-                    return $value[ 1 ];
-                }
+        $id = 0;
+        if (preg_match(self::ID_REGEX, $html, $value)) {
+            $id = (int) $value[1];
+        }
 
-                return '';
-            },
-            $this->regex_search
-        );
+        $src = '';
+        if (preg_match(self::SRC_REGEX, $html, $value)) {
+            $src = (string) $value[1];
+        }
 
-        return $data;
+        if ($id === 0 || $src === '') {
+            return [];
+        }
+
+        $currentFile = basename($src);
+
+        return [
+            'id' => $id,
+            'src' => $src,
+            'file' => $currentFile,
+            'size' => $this->size($currentFile, $id),
+        ];
+    }
+
+    private function size(string $currentFile, $id): string
+    {
+        $matchedSize = 'full';
+
+        $meta = wp_get_attachment_metadata($id);
+        $sizes = $meta['sizes'];
+        $sizes['full'] = [
+            'file' => basename($meta['file']),
+        ];
+
+        foreach ($sizes as $size => $data) {
+            if ($data['file'] === $currentFile) {
+                $matchedSize = $size;
+                break;
+            }
+        }
+
+        return $matchedSize;
     }
 }

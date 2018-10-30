@@ -1,56 +1,54 @@
 <?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
-namespace WebPify\Attachment;
+namespace WebPify\App\Provider;
 
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
+use WebPify\App\BootableProvider;
+use WebPify\Attachment\AttachmentDeletor;
 use WebPify\Attachment\Column\MediaEditColumn;
-use WebPify\Core\BootableProviderInterface;
+use WebPify\Attachment\MetaDataImageGenerator;
 use WebPify\Transformer\ImageTransformerInterface;
+use WebPify\WebPify;
 
 /**
+ * Class AttachmentProvider
+ *
  * @package WebPify\Attachment
  */
-final class Provider implements ServiceProviderInterface, BootableProviderInterface
+final class AttachmentProvider implements BootableProvider
 {
 
-    public function register(Container $plugin)
+    public function register(WebPify $plugin)
     {
-
-        $plugin->offsetSet(
+        $plugin->set(
             MetaDataImageGenerator::class,
-            function (Container $plugin): MetaDataImageGenerator {
-
+            function (WebPify $plugin): MetaDataImageGenerator {
                 return new MetaDataImageGenerator(
-                    $plugin[ ImageTransformerInterface::class ],
+                    $plugin->get(ImageTransformerInterface::class),
                     wp_get_upload_dir()
                 );
             }
         );
 
-        $plugin->offsetSet(
+        $plugin->set(
             MediaEditColumn::class,
             function (): MediaEditColumn {
-
                 return new MediaEditColumn();
             }
         );
 
-        $plugin->offsetSet(
+        $plugin->set(
             AttachmentDeletor::class,
             function (): AttachmentDeletor {
-
                 return new AttachmentDeletor();
             }
         );
     }
 
-    public function boot(Container $plugin)
+    public function boot(WebPify $plugin)
     {
-
         add_filter(
             'wp_generate_attachment_metadata',
-            [$plugin[ MetaDataImageGenerator::class ], 'generate'],
+            [$plugin->get(MetaDataImageGenerator::class), 'generate'],
             10,
             2
         );
@@ -58,19 +56,19 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
         if (is_admin()) {
             add_filter(
                 'manage_media_columns',
-                [$plugin[ MediaEditColumn::class ], 'title']
+                [$plugin->get(MediaEditColumn::class), 'title']
             );
 
             add_filter(
                 'manage_media_custom_column',
-                [$plugin[ MediaEditColumn::class ], 'content'],
+                [$plugin->get(MediaEditColumn::class), 'content'],
                 10,
                 2
             );
 
             add_action(
                 'delete_attachment',
-                [$plugin[ AttachmentDeletor::class ], 'delete']
+                [$plugin->get(AttachmentDeletor::class), 'delete']
             );
         }
     }

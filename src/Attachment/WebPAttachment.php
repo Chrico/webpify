@@ -9,7 +9,6 @@ class WebPAttachment
 {
 
     const ID = '_WebPify_attachment_meta';
-
     const DATA_SRC = 'data-webp-src';
     const DATA_SRCSET = 'data-webp-srcset';
 
@@ -19,10 +18,10 @@ class WebPAttachment
      * @var array
      */
     private $meta = [
-        'file'   => '',
-        'width'  => 0,
+        'file' => '',
+        'width' => 0,
         'height' => 0,
-        'sizes'  => [],
+        'sizes' => [],
     ];
 
     /**
@@ -33,7 +32,7 @@ class WebPAttachment
     /**
      * @var AttachmentPathResolver
      */
-    private $attachment_path_resolver;
+    private $attachmentPathResolver;
 
     /**
      * WebPImage constructor.
@@ -42,27 +41,26 @@ class WebPAttachment
      */
     public function __construct(int $id)
     {
-        $this->id = (int)$id;
+        $this->id = (int) $id;
 
         $meta = get_post_meta($this->id, self::ID, true);
         if ($meta === '') {
             $meta = [];
         }
-        $this->meta                     = array_merge($this->meta, $meta);
-        $this->attachment_path_resolver = AttachmentPathResolver::forMeta($this->meta);
+        $this->meta = array_merge($this->meta, $meta);
+        $this->attachmentPathResolver = AttachmentPathResolver::forMeta($this->meta);
     }
 
     public function srcset(string $size): string
     {
-
         $src = $this->src($size);
         if ($src === '') {
             return '';
         }
 
-        $size   = $this->size($size);
-        $srcset = (string)wp_calculate_image_srcset(
-            [$size[ 'width' ], $size[ 'height' ]],
+        $size = $this->size($size);
+        $srcset = (string) wp_calculate_image_srcset(
+            [$size['width'], $size['height']],
             $src,
             $this->meta,
             $this->id
@@ -71,30 +69,22 @@ class WebPAttachment
         return $srcset;
     }
 
-    public function path(string $size): string
-    {
-
-        return $this->attachment_path_resolver->withDir($size);
-    }
-
     public function src(string $size): string
     {
-
-        return $this->attachment_path_resolver->withUrl($size);
+        return $this->attachmentPathResolver->withUrl($size);
     }
 
     public function size(string $size): array
     {
-
         if ($size === 'full') {
             return [
-                'width'  => $this->meta[ 'width' ],
-                'height' => $this->meta[ 'height' ],
-                'file'   => $this->meta[ 'file' ],
-                'size'   => $size,
+                'width' => $this->meta['width'],
+                'height' => $this->meta['height'],
+                'file' => $this->meta['file'],
+                'size' => $size,
             ];
         } elseif ($this->sizeExists($size)) {
-            return $this->meta[ 'sizes' ][ $size ];
+            return $this->meta['sizes'][$size];
         }
 
         return [];
@@ -102,28 +92,30 @@ class WebPAttachment
 
     public function sizeExists(string $size): bool
     {
-
         return ($size === 'full')
-            ? $this->meta[ 'file' ] !== ''
-            : isset($this->meta[ 'sizes' ][ $size ][ 'file' ]);
+            ? $this->meta['file'] !== ''
+            : isset($this->meta['sizes'][$size]['file']);
+    }
+
+    public function path(string $size): string
+    {
+        return $this->attachmentPathResolver->withDir($size);
     }
 
     public function sizes(): array
     {
-
-        return $this->meta[ 'sizes' ];
+        return $this->meta['sizes'];
     }
 
     /**
-     * @param array  $original_meta
+     * @param array $original_meta
      * @param string $size
      *
      * @return int filesize in bytes.
      */
     public function diffFilesize(array $original_meta, string $size): int
     {
-
-        $webp_file     = $this->attachment_path_resolver->withDir($size);
+        $webp_file = $this->attachmentPathResolver->withDir($size);
         $original_file = AttachmentPathResolver::forMeta($original_meta)
             ->withDir($size);
 
@@ -136,7 +128,6 @@ class WebPAttachment
 
     public function meta(): array
     {
-
         return $this->meta;
     }
 }

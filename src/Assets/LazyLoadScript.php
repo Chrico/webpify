@@ -21,19 +21,17 @@ final class LazyLoadScript
     private $data;
 
     /**
-     * @param string             $plugin_file_path
+     * @param string $plugin_file_path
      * @param LazyLoadScriptData $data
      */
     public function __construct(string $plugin_file_path, LazyLoadScriptData $data)
     {
-
         $this->plugin_file_path = $plugin_file_path;
-        $this->data             = $data;
+        $this->data = $data;
     }
 
     public function enqueue()
     {
-
         wp_enqueue_script(
             self::HANDLE,
             $this->url(),
@@ -54,9 +52,10 @@ final class LazyLoadScript
      */
     private function url(): string
     {
-
-        $file_name = self::HANDLE . ($this->isDebug() ? '.js' : '.min.js');
-        $subdir    = '/assets/js/dist';
+        $file_name = self::HANDLE.($this->isDebug()
+                ? '.js'
+                : '.min.js');
+        $subdir = '/assets/js/dist';
 
         $url = plugins_url("{$subdir}/{$file_name}", $this->plugin_file_path);
 
@@ -68,8 +67,9 @@ final class LazyLoadScript
      */
     private function isDebug(): bool
     {
-
-        return defined('SCRIPT_DEBUG') ? SCRIPT_DEBUG : (defined('WP_DEBUG') && WP_DEBUG);
+        return defined('SCRIPT_DEBUG')
+            ? SCRIPT_DEBUG
+            : (defined('WP_DEBUG') && WP_DEBUG);
     }
 
     /**
@@ -80,16 +80,15 @@ final class LazyLoadScript
      */
     public function printInline(string $tag, string $handle): string
     {
-
         if ($handle === self::HANDLE) {
             $src = str_replace(
                 home_url('/wp-content'),
                 WP_CONTENT_DIR,
-                wp_scripts()->registered[ $handle ]->src
+                wp_scripts()->registered[$handle]->src
             );
 
             $content = file_get_contents($src);
-            if (!!$content) {
+            if (! ! $content) {
                 $tag = sprintf(
                     "<script>%s</script>",
                     $content

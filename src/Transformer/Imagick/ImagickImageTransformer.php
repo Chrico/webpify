@@ -16,14 +16,13 @@ final class ImagickImageTransformer implements ImageTransformerInterface
 
     public function create(string $source_file, string $dest_file): bool
     {
-
         try {
             $error_context = [
                 'source_file' => $source_file,
-                'dest_file'   => $dest_file,
+                'dest_file' => $dest_file,
             ];
 
-            if (!file_exists($source_file)) {
+            if (! file_exists($source_file)) {
                 do_action(
                     WebPify::ACTION_ERROR,
                     'Source file does not exist.',
@@ -33,13 +32,13 @@ final class ImagickImageTransformer implements ImageTransformerInterface
                 return false;
             }
 
-            $ext               = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
+            $ext = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
             $allowedExtensions = [
                 'jpg',
                 'jpeg',
                 'png',
             ];
-            if (!in_array($ext, $allowedExtensions, true)) {
+            if (! in_array($ext, $allowedExtensions, true)) {
                 do_action(
                     WebPify::ACTION_ERROR,
                     sprintf('The extension "%s" is not supported', $ext),
@@ -60,9 +59,9 @@ final class ImagickImageTransformer implements ImageTransformerInterface
 
             return $imagick->writeImage($dest_file);
         } catch (\Throwable $error) {
-            $error_context[ 'exception' ] = $error;
+            $error_context['exception'] = $error;
             if (isset($imagick)) {
-                $error_context[ 'imagick' ] = $imagick;
+                $error_context['imagick'] = $imagick;
             }
 
             do_action(
@@ -77,7 +76,6 @@ final class ImagickImageTransformer implements ImageTransformerInterface
 
     public function isActivated(): bool
     {
-
         return extension_loaded('imagick') && class_exists(\Imagick::class);
     }
 }

@@ -14,33 +14,33 @@ final class MediaEditColumn
 
     public function title(array $columns): array
     {
-
-        $columns[ self::ID ] = __('WebP', 'webpify');
+        $columns[self::ID] = __('WebP', 'webpify');
 
         return $columns;
     }
 
     public function content(string $column_name, int $attachment_id): bool
     {
-
         if ($column_name !== self::ID) {
             return false;
         }
 
         $original = wp_get_attachment_metadata($attachment_id, true);
 
-        if (!isset($original[ 'file' ])) {
+        if (! isset($original['file'])) {
             return false;
         }
 
-        $webp  = new WebPAttachment($attachment_id);
+        $webp = new WebPAttachment($attachment_id);
         $sizes = [];
-        foreach ($original[ 'sizes' ] as $size => $data) {
-            $exists  = $webp->sizeExists($size);
-            $saved   = $exists
-                ? ' <code>' . round($webp->diffFilesize($original, $size) / 1024, 2) . ' kB</code>'
+        foreach ($original['sizes'] as $size => $data) {
+            $exists = $webp->sizeExists($size);
+            $saved = $exists
+                ? ' <code>'.round($webp->diffFilesize($original, $size) / 1024, 2).' kB</code>'
                 : '';
-            $sizes[] = ($exists ? '✔' : '✘') . ' ' . $size . $saved;
+            $sizes[] = ($exists
+                    ? '✔'
+                    : '✘').' '.$size.$saved;
         }
         printf(
             '<div class="webp__sizes">%s</div>',

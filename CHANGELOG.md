@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1
+- Removed `Pimple` as dependency.
+- Implemented `psr\container` for `WebPify\WebPify`.
+- Introduced new Domain `App` and `App\Provider`.
+- Replaced `Parser\RegExImageParser` with `ImageParser`
+- Added compatibility with Gutenberg where `size-{size}` class from `<img>` is removed. 
+
 ## 1.0
 - First stable release
 - Moved to PSR-based coding standard.

@@ -21,13 +21,11 @@ final class ImageRenderer implements ImageRenderInterface
      */
     public function __construct(string $placeholder = '')
     {
-
         $this->placeholder = $placeholder;
     }
 
     public function render(string $img, int $attachment_id, string $size): string
     {
-
         if (substr($img, 0, 4) !== '<img') {
             do_action(
                 WebPify::ACTION_ERROR,
@@ -39,12 +37,12 @@ final class ImageRenderer implements ImageRenderInterface
         }
 
         $replacments = [
-            'data-src="'    => 'src="',
+            'data-src="' => 'src="',
             'data-srcset="' => 'srcset="',
         ];
 
         if ($this->placeholder !== '') {
-            $replacments[ 'src="' . $this->placeholder . '" />' ] = '/>';
+            $replacments['src="'.$this->placeholder.'" />'] = '/>';
         }
 
         if ($attachment_id !== 0) {
@@ -52,16 +50,16 @@ final class ImageRenderer implements ImageRenderInterface
 
             $webp_src = $webp->src($size);
             if ($webp_src !== '') {
-                $key = WebPAttachment::DATA_SRC . '="' . $webp_src . '" />';
+                $key = WebPAttachment::DATA_SRC.'="'.$webp_src.'" />';
 
-                $replacments[ $key ] = '/>';
+                $replacments[$key] = '/>';
             }
 
             $webp_srcset = $webp->srcset($size);
             if ($webp_srcset !== '') {
-                $key = WebPAttachment::DATA_SRCSET . '="' . $webp_srcset . '" />';
+                $key = WebPAttachment::DATA_SRCSET.'="'.$webp_srcset.'" />';
 
-                $replacments[ $key ] = '/>';
+                $replacments[$key] = '/>';
             };
         }
 
@@ -71,6 +69,6 @@ final class ImageRenderer implements ImageRenderInterface
             $img
         );
 
-        return $output . '<noscript>' . $img . '</noscript>';
+        return $output.'<noscript>'.$img.'</noscript>';
     }
 }

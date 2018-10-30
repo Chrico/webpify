@@ -17,17 +17,16 @@ final class LazyLoadScriptData
      */
     public function options(): array
     {
-
-        return (array)apply_filters(
+        return (array) apply_filters(
             self::FILTER_OPTIONS,
             [
                 'elements_selector' => "img[data-src]",
-                'threshold'         => 300,
-                'data_src'          => "src",
-                'data_srcset'       => "srcset",
-                'class_loading'     => "WebPify--loading",
-                'class_loaded'      => "WebPify--loaded",
-                'class_error'       => "WebPify--error",
+                'threshold' => 300,
+                'data_src' => "src",
+                'data_srcset' => "srcset",
+                'class_loading' => "WebPify--loading",
+                'class_loaded' => "WebPify--loaded",
+                'class_error' => "WebPify--error",
             ]
         );
     }

@@ -20,8 +20,7 @@ class AttachmentPathResolver
      */
     public function __construct(array $attachment_meta)
     {
-
-        $this->meta        = $attachment_meta;
+        $this->meta = $attachment_meta;
         $this->uploads_dir = wp_get_upload_dir();
     }
 
@@ -32,7 +31,6 @@ class AttachmentPathResolver
      */
     public static function forMeta(array $attachment_meta): AttachmentPathResolver
     {
-
         return new static($attachment_meta);
     }
 
@@ -45,7 +43,6 @@ class AttachmentPathResolver
      */
     public function withDir(string $size): string
     {
-
         return $this->resolve($size, self::TYPE_DIR);
     }
 
@@ -57,27 +54,26 @@ class AttachmentPathResolver
      */
     public function resolve(string $size, string $type): string
     {
-
-        if (!isset($this->uploads_dir[ $type ])) {
+        if (! isset($this->uploads_dir[$type])) {
             return '';
         }
 
         // the full is always required either for..
         // ... returning the full
         // ... or getting the sub-dir for a specific size.
-        if (!isset($this->meta[ 'file' ])) {
+        if (! isset($this->meta['file'])) {
             return '';
         }
 
-        $full = $this->meta[ 'file' ];
-        $dir  = trailingslashit($this->uploads_dir[ $type ]);
+        $full = $this->meta['file'];
+        $dir = trailingslashit($this->uploads_dir[$type]);
 
         if ($size === 'full') {
-            return $dir . $full;
-        } elseif (isset($this->meta[ 'sizes' ][ $size ][ 'file' ])) {
+            return $dir.$full;
+        } elseif (isset($this->meta['sizes'][$size]['file'])) {
             $dir .= trailingslashit(_wp_get_attachment_relative_path($full));
 
-            return $dir . $this->meta[ 'sizes' ][ $size ][ 'file' ];
+            return $dir.$this->meta['sizes'][$size]['file'];
         }
 
         return '';
@@ -92,7 +88,6 @@ class AttachmentPathResolver
      */
     public function withUrl(string $size): string
     {
-
         return $this->resolve($size, self::TYPE_URL);
     }
 }
