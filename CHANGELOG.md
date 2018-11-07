@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.1
+- Fixed loading of `WebPify.js` inline into footer.
+
 ## 1.1
 - Removed `Pimple` as dependency.
 - Implemented `psr\container` for `WebPify\WebPify`.
