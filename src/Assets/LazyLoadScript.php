@@ -82,12 +82,12 @@ final class LazyLoadScript
     {
         if ($handle === self::HANDLE) {
             $src = str_replace(
-                home_url('/wp-content'),
+                WP_CONTENT_URL,
                 WP_CONTENT_DIR,
                 wp_scripts()->registered[$handle]->src
             );
 
-            $content = file_get_contents($src);
+            $content = @file_get_contents($src);
             if (! ! $content) {
                 $tag = sprintf(
                     "<script>%s</script>",
