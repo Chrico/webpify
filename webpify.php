@@ -78,7 +78,7 @@ function initialize()
         $plugin = new WebPify();
         $plugin
             ->set('config.plugin_file', __FILE__)
-            ->set('config.placeholder_src', 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=')
+            ->set('config.placeholder_src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')
             ->register(new Provider\AssetProvider())
             ->register(new Provider\AttachmentProvider())
             ->register(new Provider\RendererProvider())
