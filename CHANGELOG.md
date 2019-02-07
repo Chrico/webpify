@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.3
+- Check if $meta is actually an array before using it's values. props @tzimpel
+
 ## 1.1.2
 - Changed trans gif as placeholder to `data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7` which is a white one.
 
