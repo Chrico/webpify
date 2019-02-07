@@ -102,6 +102,11 @@ final class ImageParser implements ParserInterface
         $matchedSize = 'full';
 
         $meta = wp_get_attachment_metadata($id);
+
+        if (! is_array($meta)) {
+            return $matchedSize;
+        }
+
         $sizes = $meta['sizes'];
         $sizes['full'] = [
             'file' => basename($meta['file']),
