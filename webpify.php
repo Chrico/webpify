@@ -4,7 +4,7 @@
  * Description:       Generating automatically WebP-images and provide them via feature detection and lazy loading.
  * Author:            ChriCo
  * Author URI:        https://www.chrico.info
- * Version:           1.1.3
+ * Version:           1.1.4
  * Text Domain:       webpify
  * Domain Path:       languages
  * License:           MIT
