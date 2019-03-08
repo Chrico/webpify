@@ -80,7 +80,6 @@ final class WebPify implements ContainerInterface
         if ($this->booted) {
             return false;
         }
-        $this->booted = true;
 
         /**
          * Fires right before Plugin gets bootstrapped.
@@ -94,6 +93,8 @@ final class WebPify implements ContainerInterface
                 $provider->boot($this);
             }
         }
+
+        $this->booted = true;
 
         return true;
     }
