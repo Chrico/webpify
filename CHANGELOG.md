@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.4
+-  Fixed state of booted which has to be set after boot-action.
+
 ## 1.1.3
 - Check if $meta is actually an array before using it's values. props @tzimpel
 
